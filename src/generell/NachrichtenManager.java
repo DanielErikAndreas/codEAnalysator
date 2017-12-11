@@ -147,7 +147,7 @@ public class NachrichtenManager {
             "Fehler:",
             bezeichnung("Bit fehlt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)),
             bezeichnung("Bit zu viel:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)),
-            bezeichnung("Bit gewechselt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)),
+            bezeichnung("Bit gekipt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)),
             "",
             bezeichnung("EinBitFehler:") + printWert(fs.get(Fehler.Typ.EINBIT_FEHLER)) + anteil(fs.get(Fehler.Typ.EINBIT_FEHLER)),
             bezeichnung("ZweiBitFehler:") + printWert(fs.get(Fehler.Typ.ZWEIBIT_FEHLER)) + anteil(fs.get(Fehler.Typ.ZWEIBIT_FEHLER)),

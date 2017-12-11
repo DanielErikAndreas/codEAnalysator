@@ -14,7 +14,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class Main {
-  private static String version = "v1.0";
+  private static final String name = "codEAnalysator";
+  private static final String version = "v1.0";
   private static NachrichtenManager nachrichtenManager;
   private static JTextField textFieldSelect;
 
@@ -47,7 +48,7 @@ public class Main {
     int setUpNummer = 1;
 
 
-    JFrame frame = new JFrame("CodeAnalysator " + version);
+    JFrame frame = new JFrame(name + " " + version);
     JFileChooser chooser = new JFileChooser();
     chooser.setFileFilter(new InputFileFilefilter());
 
@@ -134,7 +135,7 @@ public class Main {
     panelCheckBoxen.add(checkBoxStatistik);
 
     JCheckBox checkBoxBitfehlerverteilung = new JCheckBox("Bitfehlerverteilung");
-    checkBoxBitfehlerverteilung.setSelected(setUp.isFehlerSummenVerteilung(setUpNummer));
+    checkBoxBitfehlerverteilung.setSelected(setUp.isBitfehlerVerteilung(setUpNummer));
     panelCheckBoxen.add(checkBoxBitfehlerverteilung);
 
     JCheckBox checkBoxFehlerverteilung = new JCheckBox("Fehlerverteilung");

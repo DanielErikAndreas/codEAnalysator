@@ -98,7 +98,7 @@ public class SetUp {
     return setUpElemente[_index].pausenVerteilung;
   }
 
-  public boolean isFehlerSummenVerteilung(int _index) {
+  public boolean isBitfehlerVerteilung(int _index) {
     return setUpElemente[_index].fehlerSummenVerteilung;
   }
 

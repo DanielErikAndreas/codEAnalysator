@@ -1,0 +1,25 @@
+.pane {
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.paneCheckBox {
+    -fx-padding: 5;
+    -fx-spacing: 5;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.textFeldlang {
+
+}
+
+.textFeld {
+    -fx-max-width: 100;
+}
+
+.labels {
+
+}
