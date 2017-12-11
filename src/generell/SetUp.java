@@ -63,6 +63,12 @@ public class SetUp {
                   "80001", "0", "0-80000",
                   true, false, false, false, true,
                   "101010101010101011111111XXXXXXXXXXXXXXXXXXXX111100001100110011100001"
+          ),
+          new SetUpElement(  // (6) 20.000 Nachrichten
+                  "/home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt",
+                  "20001", "0", "0b10000100001000010-0b10101011001100010",
+                  true, false, false, false, true,
+                  "10101010101010101111111101000XXXXXXXXXXXXXXXXX11111111000000001111111111111111000000001100110011100001"
           )
   };
 

@@ -52,7 +52,7 @@ public class MainFX extends Application {
     // (3) /home/studi/usrp-Dateien/fakeProtokoll_test_Einzelnachricht.txt
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
-    int setUpNummer = 1;
+    int setUpNummer = 6;
 
 
     StackPane root = new StackPane();

@@ -166,15 +166,17 @@ public class NachrichtenParser {
       }
 
       // fehlende Sequenzen ersetzen
+      int listIndex = 0;
       for (int i = sequenzStart; i < sequenzraum.get().length; i++) {
         if (sequenzraum.get()[i] == 0) {
           tmpMassage = new Massage("0");
           tmpMassage.setSequenzNummer(i);
           tmpMassage.addFehler(Fehler.Typ.NICHT_EXISTENT, 0);
-          massages.add(i, tmpMassage);
+          massages.add(listIndex, tmpMassage);
           fehlendeSequenzen++;
           fehlerStatistik.checkMassage(tmpMassage);
         }
+        listIndex++;
       }
 
     } else {
