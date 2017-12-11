@@ -44,7 +44,7 @@ public class Main {
     // (3) /home/studi/usrp-Dateien/fakeProtokoll_test_Einzelnachricht.txt
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
-    int setUpNummer = 3;
+    int setUpNummer = 1;
 
 
     JFrame frame = new JFrame("CodeAnalysator " + version);
@@ -209,7 +209,7 @@ public class Main {
             } else {
               JOptionPane.showMessageDialog(frame, "Sequenz: kein akzeptiertes Format!");
             }
-            System.out.println("testStop");
+            System.out.println(nachrichtenManager);
           } else {
             JOptionPane.showMessageDialog(frame, "Kein akzeptierter Datentyp!");
           }

@@ -22,6 +22,7 @@ public class FehlerStatistik {
           Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0,
           Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL,
           Fehler.Typ.SHIFT,
+          Fehler.Typ.SEQUENZ_DUPLIKAT,
           Fehler.Typ.NACHBITS
   };
 

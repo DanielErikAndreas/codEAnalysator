@@ -236,6 +236,10 @@ public class NachrichtenManager {
     return sb.toString();
   }
 
+  public String toString() {
+    return "test";
+  }
+
   /**
    * setzt Start und End des Sequentraumes
    *
