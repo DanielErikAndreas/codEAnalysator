@@ -58,7 +58,7 @@ public class Massage {
       if (zwischenBitFehler > kritischFehlerCount) {
         fehlerList.getFehlerList().clear();
         addFehler(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG, 0);
-        return this;
+        break;
       }
 
 

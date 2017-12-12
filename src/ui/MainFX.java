@@ -34,6 +34,7 @@ public class MainFX extends Application {
   private static CheckBox checkBoxFehlerverteilung;
   private static CheckBox checkBoxPausenlänge;
   private static CheckBox checkBoxPausenverteilung;
+  private static CheckBox checkBoxCSVDatei;
 
 
   public static void main(String[] args) {
@@ -49,15 +50,16 @@ public class MainFX extends Application {
     // (3) /home/studi/usrp-Dateien/fakeProtokoll_test_Einzelnachricht.txt
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
+    // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
     int setUpNummer = 6;
 
-
-    CodeGenerator codeGenerator = new CodeGenerator(new File("TestDaten\\testCode.txt"));
+/*
+    CodeGenerator codeGenerator = new CodeGenerator(new File("TestDateien/testCode.txt"));
     codeGenerator.setMuster("101010101010101011111111XXXXXXXX111100001010111101101100111100000101");
     codeGenerator.setSequenz("1000000");
     codeGenerator.generate();
     System.out.println(codeGenerator);
-
+*/
 
 
     StackPane root = new StackPane();
@@ -78,8 +80,10 @@ public class MainFX extends Application {
     fileChooser.getExtensionFilters().add(extFilter);
     buttonSelect.setOnAction(e -> {
       File selectesFile = fileChooser.showOpenDialog(primaryStage);
-      if (selectesFile != null)
-        textFieldSelect.setText(fileChooser.showOpenDialog(primaryStage).getAbsolutePath());
+      if (selectesFile != null) {
+        textFieldSelect.setText(selectesFile.getAbsolutePath());
+        fileChooser.setInitialDirectory(selectesFile.getParentFile());
+      }
     });
     textFieldSelect = new TextField();
     textFieldSelect.setText(setUp.getSelect(setUpNummer));
@@ -101,7 +105,7 @@ public class MainFX extends Application {
     labelSequenz.getStyleClass().add("labels");
     textFieldSequenz = new TextField();
     textFieldSequenz.setText(setUp.getSequenz(setUpNummer));
-    textFieldSequenz.getStyleClass().add("textFeld");
+    textFieldSequenz.getStyleClass().add("textFeldlang");
 
     GridPane checkGridpane = new GridPane();
     checkGridpane.getStyleClass().add("paneCheckBox");
@@ -115,11 +119,13 @@ public class MainFX extends Application {
     checkBoxPausenlänge.setSelected(setUp.isPausenlänge(setUpNummer));
     checkBoxPausenverteilung = new CheckBox("Pausenverteilung");
     checkBoxPausenverteilung.setSelected(setUp.isPausenVerteilung(setUpNummer));
+    checkBoxCSVDatei = new CheckBox("CSV anlegen");
     checkGridpane.add(checkBoxStatistik, 0, 0);
     checkGridpane.add(checkBoxBitfehlerverteilung, 1, 0);
     checkGridpane.add(checkBoxFehlerverteilung, 2, 0);
     checkGridpane.add(checkBoxPausenlänge, 0, 1);
     checkGridpane.add(checkBoxPausenverteilung, 1, 1);
+    checkGridpane.add(checkBoxCSVDatei, 2, 1);
 
     Label labelMaske = new Label("Maske");
     labelMaske.getStyleClass().add("labels");
@@ -143,9 +149,9 @@ public class MainFX extends Application {
     gridpane.add(labelSollpause, 0, 2);
     gridpane.add(textFieldSollpause, 1, 2);
     gridpane.add(labelSequenz, 0, 3);
-    gridpane.add(textFieldSequenz, 1, 3);
+    gridpane.add(textFieldSequenz, 1, 3, 2, 1);
 
-    gridpane.add(checkGridpane, 2, 1, 1, 3);
+    gridpane.add(checkGridpane, 2, 1, 1, 2);
 
     gridpane.add(labelMaske, 0, 4);
     gridpane.add(textFieldMaske, 1, 4, 2, 1);
@@ -161,7 +167,6 @@ public class MainFX extends Application {
 
   public void analysieren() {
     File file = new File(textFieldSelect.getText());
-    Alert alert;
     if (file.isFile()) {
       String fileTyp = NachrichtenParser.getFileTyp(file);
       if (fileTyp.equals("txt") || fileTyp.equals("xml")) {
@@ -171,6 +176,8 @@ public class MainFX extends Application {
         if (nachrichtenManager.setSequenz(textFieldSequenz.getText())) {
           nachrichtenManager.generate(textFieldMaske.getText());
           nachrichtenManager.makeStatista(wechselDateiEndung(file, "_STATISTIK.txt"));
+          if (checkBoxCSVDatei.isSelected())
+            nachrichtenManager.makeStatistaCSV(wechselDateiEndung(file, "_STATISTIK.csv"));
           GrafikBuilder grafikBuilder = new GrafikBuilder(nachrichtenManager);
           grafikBuilder.setStatistik(checkBoxStatistik.isSelected());
 
@@ -189,27 +196,23 @@ public class MainFX extends Application {
 
           grafikBuilder.makeGrafik(wechselDateiEndung(file, "_GRAFIK.png"));
         } else {
-          alert = new Alert(Alert.AlertType.WARNING);
-          alert.setTitle("Warnung");
-          alert.setHeaderText("Sequenz: kein akzeptiertes Format!");
-          alert.setContentText(null);
-          alert.showAndWait();
+          warnung("Sequenz: kein akzeptiertes Format!");
         }
         System.out.println(nachrichtenManager);
       } else {
-        alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warnung");
-        alert.setHeaderText("Kein akzeptierter Datentyp!");
-        alert.setContentText(null);
-        alert.showAndWait();
+        warnung("Kein akzeptierter Datentyp!");
       }
     } else {
-      alert = new Alert(Alert.AlertType.WARNING);
-      alert.setTitle("Warnung");
-      alert.setHeaderText("Kann Datei nicht finden!");
-      alert.setContentText(null);
-      alert.showAndWait();
+      warnung("Kann Datei nicht finden!");
     }
+  }
+
+  private void warnung(String _s) {
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+    alert.setTitle("Warnung");
+    alert.setHeaderText(_s);
+    alert.setContentText(null);
+    alert.showAndWait();
   }
 
   public static File wechselDateiEndung(File _file, String _typ) {

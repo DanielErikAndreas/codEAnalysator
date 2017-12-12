@@ -71,7 +71,6 @@ public class NachrichtenManager {
 
   /**
    * erstellt die Statistik und schreibt sie in eine txt-Datei
-   *
    * @param _file
    */
   public void makeStatista(File _file) {
@@ -84,34 +83,101 @@ public class NachrichtenManager {
     }
 
     sb.append(System.lineSeparator()).append(System.lineSeparator()).append(System.lineSeparator());
-    int nummerStringLänge = (nachrichtenParser.getMassages().size()+"").length();
-    for (int i = 0; i < nachrichtenParser.getMassages().size(); i++) {
-      sb.append(passString(RECHTSBÜNDIG, i+"", nummerStringLänge));
-      sb.append(": ");
-      sb.append(nachrichtenParser.getMassages().get(i).toString()).append(System.lineSeparator());
-    }
-
-    //System.out.println(sb.toString());
 
     FileWriter fileWriter = null;
     BufferedWriter bufferedWriter = null;
+    int nummerStringLänge;
     try {
       fileWriter = new FileWriter(_file);
       bufferedWriter = new BufferedWriter(fileWriter);
       bufferedWriter.write(sb.toString());
+
+      nummerStringLänge = (nachrichtenParser.getMassages().size() + "").length();
+      for (int i = 0; i < nachrichtenParser.getMassages().size(); i++) {
+        sb = new StringBuilder();
+        sb.append(passString(RECHTSBÜNDIG, i + "", nummerStringLänge));
+        sb.append(": ");
+        sb.append(nachrichtenParser.getMassages().get(i).toString()).append(System.lineSeparator());
+        bufferedWriter.write(sb.toString());
+      }
       System.out.println("geschrieben in: " + _file.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
       try {
-        bufferedWriter.close();
-        fileWriter.close();
+        if (bufferedWriter != null)
+          bufferedWriter.close();
+        if (fileWriter != null)
+          fileWriter.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
 
   }
+
+  /**
+   * erstellt die Statistik und schreibt sie in eine csv-Datei
+   * @param _file
+   */
+  public void makeStatistaCSV(File _file) {
+    FileWriter fileWriter = null;
+    BufferedWriter bufferedWriter = null;
+    FehlerStatistik fs = nachrichtenParser.getFehlerStatistik();
+    try {
+      fileWriter = new FileWriter(_file);
+      bufferedWriter = new BufferedWriter(fileWriter);
+
+      bufferedWriter.write("maske;" + sollNachricht+System.lineSeparator());
+      bufferedWriter.write("sollPaketAnzahl;" + sollPaketAnzahl+System.lineSeparator());
+      bufferedWriter.write("empfangeneNachrichten;" + nachrichtenParser.getEmpfangeneNachrichten()+System.lineSeparator());
+      bufferedWriter.write("verluste;" + (sollPaketAnzahl - nachrichtenParser.getEmpfangeneNachrichten())+System.lineSeparator());
+      bufferedWriter.write("sequenz;" + (nachrichtenParser.getSequenzStart() == 0 && nachrichtenParser.getSequenzEnd() == 0 ?
+              "0" : nachrichtenParser.getSequenzStart() + " - " + nachrichtenParser.getSequenzEnd()));
+      bufferedWriter.write(System.lineSeparator());
+      bufferedWriter.write("sequenzFehlt;" + nachrichtenParser.getFehlendeSequenzen()+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.SEQUENZ_DUPLIKAT+";" + fs.get(Fehler.Typ.SEQUENZ_DUPLIKAT)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.NICHT_IM_SEQUENZRAUM+";" + fs.get(Fehler.Typ.NICHT_IM_SEQUENZRAUM)+System.lineSeparator());
+      bufferedWriter.write("unterschiedlichePausen;" + pausenSumme.size()+System.lineSeparator());
+      bufferedWriter.write("sollPause;" + sollPause+System.lineSeparator());
+      bufferedWriter.write("maxPause;" + nachrichtenParser.getMaxPause()+System.lineSeparator());
+      bufferedWriter.write("minPause;" + nachrichtenParser.getMinPause()+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.KEIN_FEHLER+";" + fs.get(Fehler.Typ.KEIN_FEHLER)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT+";" + fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.EINBIT_FEHLER+";" + fs.get(Fehler.Typ.EINBIT_FEHLER)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWEIBIT_FEHLER+";" + fs.get(Fehler.Typ.ZWEIBIT_FEHLER)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.DREIBIT_FEHLER+";" + fs.get(Fehler.Typ.DREIBIT_FEHLER)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.SHIFT+";" + fs.get(Fehler.Typ.SHIFT)+System.lineSeparator());
+      bufferedWriter.write("maxShift;" + nachrichtenParser.getMaxShift()+System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.NACHBITS+";" + fs.get(Fehler.Typ.NACHBITS)+System.lineSeparator());
+      bufferedWriter.write("maxNachbits;" + nachrichtenParser.getMaxNachbit()+System.lineSeparator());
+
+
+      System.out.println("geschrieben in: " + _file.getAbsolutePath());
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (bufferedWriter != null)
+          bufferedWriter.close();
+        if (fileWriter != null)
+          fileWriter.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+  }
+
 
   public String[] getTextBlock() {
     FehlerStatistik fs = nachrichtenParser.getFehlerStatistik();
@@ -177,18 +243,19 @@ public class NachrichtenManager {
     if (wert == 0.0) {
       return "";
     }
-    return passString(RECHTSBÜNDIG,String.format(format, wert) + "%", zahlLänge3);
+    return passString(RECHTSBÜNDIG, String.format(format, wert) + "%", zahlLänge3);
   }
 
   private String printWert(int _wert) {
     return passString(RECHTSBÜNDIG, NumberFormat.getInstance().format(_wert), zahlLänge2);
   }
+
   private String printWert(double _wert) {
-    return passString(RECHTSBÜNDIG ,NumberFormat.getInstance().format(_wert), zahlLänge2);
+    return passString(RECHTSBÜNDIG, NumberFormat.getInstance().format(_wert), zahlLänge2);
   }
 
   private String bezeichnung(String _s) {
-    return passString(LINKSBÜNDIG,_s, zahlLänge1);
+    return passString(LINKSBÜNDIG, _s, zahlLänge1);
   }
 
   private String durchschnitt(long _summe, int _anzahl) {
@@ -200,7 +267,7 @@ public class NachrichtenManager {
     }
     String s = NumberFormat.getInstance().format(durchschnitt);
     String splitString[] = s.split(",");
-    int addSpace =  zahlLänge2 - splitString[0].length();
+    int addSpace = zahlLänge2 - splitString[0].length();
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < addSpace; i++) {
       sb.append(" ");
@@ -223,13 +290,13 @@ public class NachrichtenManager {
 
     int zusatzSpace = _länge - _s.length();
     StringBuffer sb = new StringBuffer();
-    if(_ausrichtung == LINKSBÜNDIG) {
+    if (_ausrichtung == LINKSBÜNDIG) {
       sb.append(_s);
     }
     for (int i = 0; i < zusatzSpace; i++) {
       sb.append(" ");
     }
-    if(_ausrichtung == RECHTSBÜNDIG) {
+    if (_ausrichtung == RECHTSBÜNDIG) {
       sb.append(_s);
     }
 

@@ -4,16 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Allon on 11.12.2017.
  */
 public class CodeGenerator {
-  private ArrayList<String> muster = new ArrayList<String>();
-  private String musterString;
+  private String muster;
   private int seqStart, seqEnd;
-  private boolean isSequenz = false;
   private File outFile;
 
   public static final int RECHTSBÜNDIG = 1;
@@ -30,8 +27,8 @@ public class CodeGenerator {
       seqEnd = maxSequenzNachMuster;
     }
 
-    char[] musterChars = new char[musterString.length()];
-    musterString.getChars(0, musterString.length(), musterChars, 0);
+    char[] musterChars = new char[muster.length()];
+    muster.getChars(0, muster.length(), musterChars, 0);
 
     FileWriter fileWriter = null;
     BufferedWriter bufferedWriter = null;
@@ -63,8 +60,10 @@ public class CodeGenerator {
       e.printStackTrace();
     } finally {
       try {
-        bufferedWriter.close();
-        fileWriter.close();
+        if (bufferedWriter != null)
+          bufferedWriter.close();
+        if (fileWriter != null)
+          fileWriter.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -89,70 +88,23 @@ public class CodeGenerator {
     return sb.toString();
   }
 
-  private int[] schnittPunkte() {
-    ArrayList<Integer> schnittPunkteListe = new ArrayList<Integer>();
-    boolean inDynFeld = false;
-    for (int i = 0; i < musterString.length(); i++) {
-      if (musterString.charAt(i) == 'X' && !inDynFeld) {
-        schnittPunkteListe.add(i);
-        inDynFeld = true;
-      } else if ((musterString.charAt(i) != 'X' || i == musterString.length() - 1) && inDynFeld) {
-        schnittPunkteListe.add(i);
-        inDynFeld = false;
-      }
-      if (i == musterString.length() - 1 && inDynFeld) {
-        schnittPunkteListe.add(i + 1);
-      }
-    }
-
-    int[] schnittPunkte = new int[schnittPunkteListe.size()];
-    for (int i = 0; i < schnittPunkte.length; i++) {
-      schnittPunkte[i] = schnittPunkteListe.get(i);
-    }
-
-    return schnittPunkte;
-  }
-
   private int sequenzBitLänge() {
     int sequenzBitLänge = 0;
-    for (String s : muster) {
-      if (s.charAt(0) == 'X') {
-        sequenzBitLänge += s.length();
+    for (int i = 0; i < muster.length(); i++) {
+      if (muster.charAt(i) == 'X') {
+        sequenzBitLänge++;
       }
     }
     return sequenzBitLänge;
   }
 
   public void setMuster(String _muster) {
-    musterString = _muster;
-    boolean isInXSegment = false;
-    int tmpStart = 0;
-    for (int i = 0; i < musterString.length(); i++) {
-      if (musterString.charAt(i) == 'X' && !isInXSegment) {
-        if (i > 0)
-          muster.add(musterString.substring(tmpStart, i));
-        tmpStart = i;
-        isInXSegment = true;
-      } else if (musterString.charAt(i) != 'X' && isInXSegment) {
-        muster.add(musterString.substring(tmpStart, i));
-        tmpStart = i;
-        isInXSegment = false;
-      }
-      if (i == musterString.length() - 1) {
-        muster.add(musterString.substring(tmpStart, i + 1));
-      }
-    }
+    muster = _muster;
   }
 
   public void setSequenz(int _start, int _end) {
     seqStart = _start;
     seqEnd = _end;
-
-    if (seqEnd > 0) {
-      isSequenz = true;
-    } else {
-      isSequenz = false;
-    }
   }
 
   public boolean setSequenz(String _sequenz) {
@@ -168,15 +120,8 @@ public class CodeGenerator {
 
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("m(");
-    for (int i = 0; i < muster.size(); i++) {
-      if (i < muster.size() - 1) {
-        sb.append(muster.get(i)).append(", ");
-      } else {
-        sb.append(muster.get(i)).append("), ");
-      }
-    }
-    sb.append("s(").append(seqStart).append("-").append(seqEnd).append(")");
+    sb.append("m(").append(muster);
+    sb.append("), s(").append(seqStart).append("-").append(seqEnd).append(")");
     return sb.toString();
   }
 }
