@@ -243,7 +243,25 @@ public class NachrichtenParser {
   }
 
   public boolean setSequenzRaum(String _sequenzRaum) {
+    int[] sequenzRaum = parsSequenzRaum(_sequenzRaum);
+    if (sequenzRaum[0] >= 0 && sequenzRaum[1] >= 0) {
+      sequenzStart = sequenzRaum[0];
+      sequenzEnd = sequenzRaum[1];
+      if (sequenzEnd > 0) {
+        isSequenz = true;
+      } else {
+        isSequenz = false;
+      }
+    } else {
+      System.out.println("Sequenz: kein akzeptiertes Format!");
+      return false;
+    }
+    return true;
+  }
+
+  public static int[] parsSequenzRaum(String _sequenzRaum) {
     boolean isSplit = false;
+    int[] seqenzRaum = new int[2];
 
     for (int i = 0; i < _sequenzRaum.length(); i++) {
       if (_sequenzRaum.charAt(i) == '-') {
@@ -257,33 +275,23 @@ public class NachrichtenParser {
       int wert1 = parsSequenz(sequenzSplit[0]);
       int wert2 = parsSequenz(sequenzSplit[1]);
       if (wert1 >= 0 && wert2 >= 0) {
-        sequenzStart = wert1;
-        sequenzEnd = wert2;
+        seqenzRaum[0] = wert1;
+        seqenzRaum[1] = wert2;
       } else {
-        sequenzStart = 0;
-        sequenzEnd = 0;
-        System.out.println("Sequenz: kein akzeptiertes Format!");
-        return false;
+        seqenzRaum[0] = -1;
+        seqenzRaum[1] = -1;
       }
     } else {
       int wert = parsSequenz(_sequenzRaum);
       if (wert >= 0) {
-        sequenzStart = 0;
-        sequenzEnd = wert;
+        seqenzRaum[0] = 0;
+        seqenzRaum[1] = wert;
       } else {
-        sequenzStart = 0;
-        sequenzEnd = 0;
-        System.out.println("Sequenz: kein akzeptiertes Format!");
-        return false;
+        seqenzRaum[0] = -1;
+        seqenzRaum[1] = -1;
       }
     }
-
-    if (sequenzEnd == 0) {
-      isSequenz = false;
-    } else {
-      isSequenz = true;
-    }
-    return true;
+    return seqenzRaum;
   }
 
   public static int parsSequenz(String _wert) {

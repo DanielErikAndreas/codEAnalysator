@@ -1,9 +1,6 @@
 package ui;
 
-import generell.GrafikBuilder;
-import generell.NachrichtenManager;
-import generell.NachrichtenParser;
-import generell.SetUp;
+import generell.*;
 import graphen.GraphFehlerverteilung;
 import graphen.GraphMassageFehlerverteilung;
 import graphen.GraphPausenlänge;
@@ -53,6 +50,14 @@ public class MainFX extends Application {
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
     int setUpNummer = 6;
+
+
+    CodeGenerator codeGenerator = new CodeGenerator(new File("TestDaten\\testCode.txt"));
+    codeGenerator.setMuster("101010101010101011111111XXXXXXXX111100001010111101101100111100000101");
+    codeGenerator.setSequenz("1000000");
+    codeGenerator.generate();
+    System.out.println(codeGenerator);
+
 
 
     StackPane root = new StackPane();
