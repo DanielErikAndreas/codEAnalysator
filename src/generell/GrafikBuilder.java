@@ -54,8 +54,9 @@ public class GrafikBuilder {
    *
    * @param _file
    */
-  public void makeGrafik(File _file) {
+  public String makeGrafik(File _file) {
     int maxBreite = 0;
+    String outString = null;
 
     // ermittelt die Höhe der Grafik mit der Summierung der Höhern der Graphen
     höhe = paddingTop;
@@ -109,10 +110,14 @@ public class GrafikBuilder {
     // schreibe Graph in eine png-Datei
     try {
       ImageIO.write(grafik, "png", _file);
+      outString = "Grafik: " + _file.getAbsolutePath();
       System.out.println("Grafik: " + _file.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
+      outString = "Grafik: fehlgeschlagen";
     }
+
+    return outString;
   }
 
   private void schreibeStatistikBlock(int _x, int _y) {

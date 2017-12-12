@@ -23,3 +23,8 @@
 .labels {
 
 }
+
+.textArea {
+    -fx-font-family: Monospaced;
+    -fx-display-caret:false;
+}

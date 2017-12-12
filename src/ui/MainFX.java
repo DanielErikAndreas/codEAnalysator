@@ -36,6 +36,8 @@ public class MainFX extends Application {
   private static CheckBox checkBoxPausenverteilung;
   private static CheckBox checkBoxCSVDatei;
 
+  private static TextArea textArea;
+
 
   public static void main(String[] args) {
     launch(args);
@@ -51,7 +53,7 @@ public class MainFX extends Application {
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
     // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
-    int setUpNummer = 6;
+    int setUpNummer = 1;
 
 /*
     CodeGenerator codeGenerator = new CodeGenerator(new File("TestDateien/testCode.txt"));
@@ -141,6 +143,9 @@ public class MainFX extends Application {
     HBox.setHgrow(buttonStart, Priority.ALWAYS);
     buttonStart.setMaxWidth(Double.MAX_VALUE);
 
+    textArea = new TextArea();
+    textArea.getStyleClass().add("textArea");
+    textArea.setEditable(false);
 
     gridpane.add(buttonSelect, 0, 0);
     gridpane.add(textFieldSelect, 1, 0, 2, 1);
@@ -158,6 +163,8 @@ public class MainFX extends Application {
 
     gridpane.add(buttonStart, 0, 5, 3, 1);
 
+    gridpane.add(textArea, 0, 6, 3, 1);
+
     root.getChildren().add(gridpane);
     primaryStage.setTitle(name + " " + version);
     primaryStage.setResizable(false);
@@ -167,17 +174,25 @@ public class MainFX extends Application {
 
   public void analysieren() {
     File file = new File(textFieldSelect.getText());
+    String textAreaString = null;
+
     if (file.isFile()) {
       String fileTyp = NachrichtenParser.getFileTyp(file);
       if (fileTyp.equals("txt") || fileTyp.equals("xml")) {
         nachrichtenManager = new NachrichtenManager(file);
         nachrichtenManager.setSollPaketAnzahl(Integer.parseInt(textFieldNachrichten.getText()));
         nachrichtenManager.setSollPause(Integer.parseInt(textFieldSollpause.getText()));
+
         if (nachrichtenManager.setSequenz(textFieldSequenz.getText())) {
+
           nachrichtenManager.generate(textFieldMaske.getText());
-          nachrichtenManager.makeStatista(wechselDateiEndung(file, "_STATISTIK.txt"));
+
+          textAreaString = nachrichtenManager.makeStatista(wechselDateiEndung(file, "_STATISTIK.txt"));
+          textArea.setText(textAreaString);
+
           if (checkBoxCSVDatei.isSelected())
             nachrichtenManager.makeStatistaCSV(wechselDateiEndung(file, "_STATISTIK.csv"));
+
           GrafikBuilder grafikBuilder = new GrafikBuilder(nachrichtenManager);
           grafikBuilder.setStatistik(checkBoxStatistik.isSelected());
 
@@ -194,7 +209,8 @@ public class MainFX extends Application {
             grafikBuilder.addGraph(new GraphPausenverteilung(nachrichtenManager));
           }
 
-          grafikBuilder.makeGrafik(wechselDateiEndung(file, "_GRAFIK.png"));
+          textAreaString += System.lineSeparator() + grafikBuilder.makeGrafik(wechselDateiEndung(file, "_GRAFIK.png"));
+          textArea.setText(textAreaString);
         } else {
           warnung("Sequenz: kein akzeptiertes Format!");
         }

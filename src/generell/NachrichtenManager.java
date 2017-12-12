@@ -71,9 +71,10 @@ public class NachrichtenManager {
 
   /**
    * erstellt die Statistik und schreibt sie in eine txt-Datei
+   *
    * @param _file
    */
-  public void makeStatista(File _file) {
+  public String makeStatista(File _file) {
     Collections.sort(pausenSumme);
     String[] textBlock = getTextBlock();
     StringBuilder sb = new StringBuilder();
@@ -83,6 +84,8 @@ public class NachrichtenManager {
     }
 
     sb.append(System.lineSeparator()).append(System.lineSeparator()).append(System.lineSeparator());
+
+    String outString = sb.toString();
 
     FileWriter fileWriter = null;
     BufferedWriter bufferedWriter = null;
@@ -100,6 +103,8 @@ public class NachrichtenManager {
         sb.append(nachrichtenParser.getMassages().get(i).toString()).append(System.lineSeparator());
         bufferedWriter.write(sb.toString());
       }
+
+      outString += "geschrieben in: " + _file.getAbsolutePath();
       System.out.println("geschrieben in: " + _file.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
@@ -113,11 +118,12 @@ public class NachrichtenManager {
         e.printStackTrace();
       }
     }
-
+    return outString;
   }
 
   /**
    * erstellt die Statistik und schreibt sie in eine csv-Datei
+   *
    * @param _file
    */
   public void makeStatistaCSV(File _file) {
@@ -128,38 +134,38 @@ public class NachrichtenManager {
       fileWriter = new FileWriter(_file);
       bufferedWriter = new BufferedWriter(fileWriter);
 
-      bufferedWriter.write("maske;" + sollNachricht+System.lineSeparator());
-      bufferedWriter.write("sollPaketAnzahl;" + sollPaketAnzahl+System.lineSeparator());
-      bufferedWriter.write("empfangeneNachrichten;" + nachrichtenParser.getEmpfangeneNachrichten()+System.lineSeparator());
-      bufferedWriter.write("verluste;" + (sollPaketAnzahl - nachrichtenParser.getEmpfangeneNachrichten())+System.lineSeparator());
+      bufferedWriter.write("maske;" + sollNachricht + System.lineSeparator());
+      bufferedWriter.write("sollPaketAnzahl;" + sollPaketAnzahl + System.lineSeparator());
+      bufferedWriter.write("empfangeneNachrichten;" + nachrichtenParser.getEmpfangeneNachrichten() + System.lineSeparator());
+      bufferedWriter.write("verluste;" + (sollPaketAnzahl - nachrichtenParser.getEmpfangeneNachrichten()) + System.lineSeparator());
       bufferedWriter.write("sequenz;" + (nachrichtenParser.getSequenzStart() == 0 && nachrichtenParser.getSequenzEnd() == 0 ?
               "0" : nachrichtenParser.getSequenzStart() + " - " + nachrichtenParser.getSequenzEnd()));
       bufferedWriter.write(System.lineSeparator());
-      bufferedWriter.write("sequenzFehlt;" + nachrichtenParser.getFehlendeSequenzen()+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.SEQUENZ_DUPLIKAT+";" + fs.get(Fehler.Typ.SEQUENZ_DUPLIKAT)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.NICHT_IM_SEQUENZRAUM+";" + fs.get(Fehler.Typ.NICHT_IM_SEQUENZRAUM)+System.lineSeparator());
-      bufferedWriter.write("unterschiedlichePausen;" + pausenSumme.size()+System.lineSeparator());
-      bufferedWriter.write("sollPause;" + sollPause+System.lineSeparator());
-      bufferedWriter.write("maxPause;" + nachrichtenParser.getMaxPause()+System.lineSeparator());
-      bufferedWriter.write("minPause;" + nachrichtenParser.getMinPause()+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.KEIN_FEHLER+";" + fs.get(Fehler.Typ.KEIN_FEHLER)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT+";" + fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.EINBIT_FEHLER+";" + fs.get(Fehler.Typ.EINBIT_FEHLER)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWEIBIT_FEHLER+";" + fs.get(Fehler.Typ.ZWEIBIT_FEHLER)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.DREIBIT_FEHLER+";" + fs.get(Fehler.Typ.DREIBIT_FEHLER)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL+";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.SHIFT+";" + fs.get(Fehler.Typ.SHIFT)+System.lineSeparator());
-      bufferedWriter.write("maxShift;" + nachrichtenParser.getMaxShift()+System.lineSeparator());
-      bufferedWriter.write(Fehler.Typ.NACHBITS+";" + fs.get(Fehler.Typ.NACHBITS)+System.lineSeparator());
-      bufferedWriter.write("maxNachbits;" + nachrichtenParser.getMaxNachbit()+System.lineSeparator());
+      bufferedWriter.write("sequenzFehlt;" + nachrichtenParser.getFehlendeSequenzen() + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.SEQUENZ_DUPLIKAT + ";" + fs.get(Fehler.Typ.SEQUENZ_DUPLIKAT) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.NICHT_IM_SEQUENZRAUM + ";" + fs.get(Fehler.Typ.NICHT_IM_SEQUENZRAUM) + System.lineSeparator());
+      bufferedWriter.write("unterschiedlichePausen;" + pausenSumme.size() + System.lineSeparator());
+      bufferedWriter.write("sollPause;" + sollPause + System.lineSeparator());
+      bufferedWriter.write("maxPause;" + nachrichtenParser.getMaxPause() + System.lineSeparator());
+      bufferedWriter.write("minPause;" + nachrichtenParser.getMinPause() + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.KEIN_FEHLER + ";" + fs.get(Fehler.Typ.KEIN_FEHLER) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT + ";" + fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_FEHLT + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.EINBIT_FEHLER + ";" + fs.get(Fehler.Typ.EINBIT_FEHLER) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWEIBIT_FEHLER + ";" + fs.get(Fehler.Typ.ZWEIBIT_FEHLER) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.DREIBIT_FEHLER + ";" + fs.get(Fehler.Typ.DREIBIT_FEHLER) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1 + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0 + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL + ";" + fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL) + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.SHIFT + ";" + fs.get(Fehler.Typ.SHIFT) + System.lineSeparator());
+      bufferedWriter.write("maxShift;" + nachrichtenParser.getMaxShift() + System.lineSeparator());
+      bufferedWriter.write(Fehler.Typ.NACHBITS + ";" + fs.get(Fehler.Typ.NACHBITS) + System.lineSeparator());
+      bufferedWriter.write("maxNachbits;" + nachrichtenParser.getMaxNachbit() + System.lineSeparator());
 
 
       System.out.println("geschrieben in: " + _file.getAbsolutePath());
