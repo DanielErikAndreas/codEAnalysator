@@ -6,6 +6,7 @@ import graphen.GraphMassageFehlerverteilung;
 import graphen.GraphPausenlänge;
 import graphen.GraphPausenverteilung;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -38,6 +39,8 @@ public class MainFX extends Application {
 
   private static TextArea textArea;
 
+  private static MenuBar menuBar;
+
 
   public static void main(String[] args) {
     launch(args);
@@ -63,11 +66,17 @@ public class MainFX extends Application {
     System.out.println(codeGenerator);
 */
 
-
-    StackPane root = new StackPane();
-    //Scene scene = new Scene(root, 300, 250);
+    VBox root = new VBox();
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
+
+    menuBar = new MenuBar();
+    Menu fileMenu = new Menu("File");
+    Menu editMenu = new Menu("Edit");
+    Menu helpMenu = new Menu("Help");
+    menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
+    root.getChildren().add(menuBar);
+
 
     GridPane gridpane = new GridPane();
     gridpane.getStyleClass().add("pane");
