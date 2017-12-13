@@ -71,10 +71,10 @@ public class MainFX extends Application {
     scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
 
     menuBar = new MenuBar();
-    Menu fileMenu = new Menu("File");
-    Menu editMenu = new Menu("Edit");
-    Menu helpMenu = new Menu("Help");
-    menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
+    Menu menuStart = new Menu("Start");
+    MenuItem newItemCodeGenerator = new MenuItem("CodeGenerator");
+    menuStart.getItems().addAll(newItemCodeGenerator);
+    menuBar.getMenus().addAll(menuStart);
     root.getChildren().add(menuBar);
 
 
