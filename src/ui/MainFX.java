@@ -6,6 +6,7 @@ import graphen.GraphMassageFehlerverteilung;
 import graphen.GraphPausenlänge;
 import graphen.GraphPausenverteilung;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -58,28 +59,23 @@ public class MainFX extends Application {
     // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
     int setUpNummer = 1;
 
-/*
-    CodeGenerator codeGenerator = new CodeGenerator(new File("TestDateien/testCode.txt"));
-    codeGenerator.setMuster("101010101010101011111111XXXXXXXX111100001010111101101100111100000101");
-    codeGenerator.setSequenz("1000000");
-    codeGenerator.generate();
-    System.out.println(codeGenerator);
-*/
-
     VBox root = new VBox();
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
 
     menuBar = new MenuBar();
     Menu menuStart = new Menu("Start");
-    MenuItem newItemCodeGenerator = new MenuItem("CodeGenerator");
-    menuStart.getItems().addAll(newItemCodeGenerator);
+    MenuItem menuItemCodeGenerator = new MenuItem("CodeGenerator");
+    menuItemCodeGenerator.setOnAction(e -> {
+      CodeGeneratorUI.getWindow(this);
+    });
+    menuStart.getItems().addAll(menuItemCodeGenerator);
     menuBar.getMenus().addAll(menuStart);
     root.getChildren().add(menuBar);
 
 
-    GridPane gridpane = new GridPane();
-    gridpane.getStyleClass().add("pane");
+    GridPane gridPane = new GridPane();
+    gridPane.getStyleClass().add("pane");
 
 
     Button buttonSelect = new Button();
@@ -156,29 +152,30 @@ public class MainFX extends Application {
     textArea.getStyleClass().add("textArea");
     textArea.setEditable(false);
 
-    gridpane.add(buttonSelect, 0, 0);
-    gridpane.add(textFieldSelect, 1, 0, 2, 1);
-    gridpane.add(labelNachrichten, 0, 1);
-    gridpane.add(textFieldNachrichten, 1, 1);
-    gridpane.add(labelSollpause, 0, 2);
-    gridpane.add(textFieldSollpause, 1, 2);
-    gridpane.add(labelSequenz, 0, 3);
-    gridpane.add(textFieldSequenz, 1, 3, 2, 1);
+    gridPane.add(buttonSelect, 0, 0);
+    gridPane.add(textFieldSelect, 1, 0, 2, 1);
+    gridPane.add(labelNachrichten, 0, 1);
+    gridPane.add(textFieldNachrichten, 1, 1);
+    gridPane.add(labelSollpause, 0, 2);
+    gridPane.add(textFieldSollpause, 1, 2);
+    gridPane.add(labelSequenz, 0, 3);
+    gridPane.add(textFieldSequenz, 1, 3, 2, 1);
 
-    gridpane.add(checkGridpane, 2, 1, 1, 2);
+    gridPane.add(checkGridpane, 2, 1, 1, 2);
 
-    gridpane.add(labelMaske, 0, 4);
-    gridpane.add(textFieldMaske, 1, 4, 2, 1);
+    gridPane.add(labelMaske, 0, 4);
+    gridPane.add(textFieldMaske, 1, 4, 2, 1);
 
-    gridpane.add(buttonStart, 0, 5, 3, 1);
+    gridPane.add(buttonStart, 0, 5, 3, 1);
 
-    gridpane.add(textArea, 0, 6, 3, 1);
+    gridPane.add(textArea, 0, 6, 3, 1);
 
-    root.getChildren().add(gridpane);
+    root.getChildren().add(gridPane);
     primaryStage.setTitle(name + " " + version);
     primaryStage.setResizable(false);
     primaryStage.setScene(scene);
     primaryStage.show();
+    primaryStage.setOnCloseRequest(e -> Platform.exit());
   }
 
   public void analysieren() {
