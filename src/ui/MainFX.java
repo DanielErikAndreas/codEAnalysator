@@ -59,15 +59,18 @@ public class MainFX extends Application {
     // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
     int setUpNummer = 1;
 
+    //System.out.println(CodeGenerator.großbuchstaben("asdER123sd()"));
+
     VBox root = new VBox();
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
+    CodeGeneratorUI generatorUI = new CodeGeneratorUI();
 
     menuBar = new MenuBar();
     Menu menuStart = new Menu("Start");
     MenuItem menuItemCodeGenerator = new MenuItem("CodeGenerator");
     menuItemCodeGenerator.setOnAction(e -> {
-      CodeGeneratorUI.getWindow(this);
+      generatorUI.getWindow(this);
     });
     menuStart.getItems().addAll(menuItemCodeGenerator);
     menuBar.getMenus().addAll(menuStart);
@@ -98,19 +101,19 @@ public class MainFX extends Application {
 
     Label labelNachrichten = new Label("Nachrichten");
     labelNachrichten.getStyleClass().add("labels");
-    textFieldNachrichten = new TextField();
+    textFieldNachrichten = new NummerTextFeld();
     textFieldNachrichten.setText(setUp.getNachrichten(setUpNummer));
     textFieldNachrichten.getStyleClass().add("textFeld");
 
     Label labelSollpause = new Label("Sollpause");
     labelSollpause.getStyleClass().add("labels");
-    textFieldSollpause = new TextField();
+    textFieldSollpause = new NummerTextFeld();
     textFieldSollpause.setText(setUp.getSollPause(setUpNummer));
     textFieldSollpause.getStyleClass().add("textFeld");
 
     Label labelSequenz = new Label("Sequenzraum");
     labelSequenz.getStyleClass().add("labels");
-    textFieldSequenz = new TextField();
+    textFieldSequenz = new SequenzTextFeld();
     textFieldSequenz.setText(setUp.getSequenz(setUpNummer));
     textFieldSequenz.getStyleClass().add("textFeldlang");
 
@@ -136,7 +139,7 @@ public class MainFX extends Application {
 
     Label labelMaske = new Label("Maske");
     labelMaske.getStyleClass().add("labels");
-    textFieldMaske = new TextField();
+    textFieldMaske = new MaskeTextFeld();
     textFieldMaske.setText(setUp.getMaske(setUpNummer));
     textFieldMaske.getStyleClass().add("textFeldlang");
 

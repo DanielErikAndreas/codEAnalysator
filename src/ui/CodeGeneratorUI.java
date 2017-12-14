@@ -19,9 +19,15 @@ import java.io.File;
 public class CodeGeneratorUI {
   public static boolean isAtiv = false;
   public static String currentPath = System.getProperty("user.home");
+  private int fehlerBitFehlt;
+  private int fehlerBitGewechselt;
+  private int fehlerBitZuviel;
+  private TextField textFieldBitFehlt;
+  private TextField textFieldBitGewechselt;
+  private TextField textFieldBitZuViel;
 
 
-  public static void getWindow(Application _application) {
+  public void getWindow(Application _application) {
     if (!isAtiv) {
       isAtiv = true;
       Stage stage = new Stage();
@@ -62,6 +68,61 @@ public class CodeGeneratorUI {
       textFieldSequenzraum.setText("1000000");
       textFieldSequenzraum.getStyleClass().add("textFeldlang");
 
+
+      // Fehlerangabe
+      Label labelFehlerAnzahl = new Label("Fehleranzahl");
+      labelFehlerAnzahl.getStyleClass().add("labels");
+
+      Label labelEinBitFehler = new Label("Ein Bit Fehler");
+      labelEinBitFehler.getStyleClass().add("labels");
+      TextField textFieldEinBitFehler = new TextField();
+      textFieldEinBitFehler.setText("0");
+      textFieldEinBitFehler.getStyleClass().add("textFeld");
+
+      Label labelZweiBitFehler = new Label("Zwei Bit Fehler");
+      labelZweiBitFehler.getStyleClass().add("labels");
+      TextField textFieldZweiBitFehler = new TextField();
+      textFieldZweiBitFehler.setText("0");
+      textFieldZweiBitFehler.getStyleClass().add("textFeld");
+
+      Label labelDreiBitFehler = new Label("Zwei Bit Fehler");
+      labelDreiBitFehler.getStyleClass().add("labels");
+      TextField textFieldDreiBitFehler = new TextField();
+      textFieldDreiBitFehler.setText("0");
+      textFieldDreiBitFehler.getStyleClass().add("textFeld");
+
+      Label labelFrei = new Label("");
+      labelFrei.setPrefWidth(50);
+
+      // Fehleranteil
+      Label labelFehlerAnteil = new Label("Anteil von 100");
+      labelFehlerAnteil.getStyleClass().add("labels");
+
+      Label labelBitFehlt = new Label("Bit fehlt");
+      labelBitFehlt.getStyleClass().add("labels");
+      textFieldBitFehlt = new NummerTextFeld();
+      textFieldBitFehlt.setText("50");
+      textFieldBitFehlt.getStyleClass().add("textFeld");
+      textFieldBitFehlt.setOnAction(e -> {
+        System.out.println("enter");
+      });
+      textFieldBitFehlt.setOnMouseClicked(e -> {
+        System.out.println("click");
+      });
+
+      Label labelZweiBitGewechselt = new Label("Bit gekippt");
+      labelZweiBitGewechselt.getStyleClass().add("labels");
+      textFieldBitGewechselt = new NummerTextFeld();
+      textFieldBitGewechselt.setText("25");
+      textFieldBitGewechselt.getStyleClass().add("textFeld");
+
+      Label labelBitZuViel = new Label("Bit zu viel");
+      labelBitZuViel.getStyleClass().add("labels");
+      textFieldBitZuViel = new NummerTextFeld();
+      textFieldBitZuViel.setText("25");
+      textFieldBitZuViel.getStyleClass().add("textFeld");
+
+
       Button buttonGenerieren = new Button();
       buttonGenerieren.setText("generieren");
       buttonGenerieren.setOnAction(e -> {
@@ -74,12 +135,32 @@ public class CodeGeneratorUI {
       buttonGenerieren.setMaxWidth(Double.MAX_VALUE);
 
       gridPane.add(buttonZiel, 0, 0);
-      gridPane.add(textFieldZiel, 1, 0);
+      gridPane.add(textFieldZiel, 1, 0, 4, 1);
+
       gridPane.add(labelMaske, 0, 1);
-      gridPane.add(textFieldMaske, 1, 1);
+      gridPane.add(textFieldMaske, 1, 1, 4, 1);
       gridPane.add(labelSequenzraum, 0, 2);
-      gridPane.add(textFieldSequenzraum, 1, 2);
-      gridPane.add(buttonGenerieren, 0, 3, 2, 1);
+      gridPane.add(textFieldSequenzraum, 1, 2, 4, 1);
+
+      gridPane.add(labelFrei, 2, 3);
+
+      gridPane.add(labelFehlerAnzahl, 1, 3);
+      gridPane.add(labelEinBitFehler, 0, 4);
+      gridPane.add(textFieldEinBitFehler, 1, 4);
+      gridPane.add(labelZweiBitFehler, 0, 5);
+      gridPane.add(textFieldZweiBitFehler, 1, 5);
+      gridPane.add(labelDreiBitFehler, 0, 6);
+      gridPane.add(textFieldDreiBitFehler, 1, 6);
+
+      gridPane.add(labelFehlerAnteil, 4, 3);
+      gridPane.add(labelBitFehlt, 3, 4);
+      gridPane.add(textFieldBitFehlt, 4, 4);
+      gridPane.add(labelZweiBitGewechselt, 3, 5);
+      gridPane.add(textFieldBitGewechselt, 4, 5);
+      gridPane.add(labelBitZuViel, 3, 6);
+      gridPane.add(textFieldBitZuViel, 4, 6);
+
+      gridPane.add(buttonGenerieren, 0, 7, 6, 1);
 
 
       box.getChildren().add(gridPane);
@@ -104,5 +185,14 @@ public class CodeGeneratorUI {
       }
     }
     return fileNameKomplett;
+  }
+
+  private void berechneWerte() {
+    fehlerBitFehlt = Integer.parseInt(textFieldBitFehlt.getText());
+    fehlerBitGewechselt = Integer.parseInt(textFieldBitGewechselt.getText());
+    fehlerBitZuviel = Integer.parseInt(textFieldBitZuViel.getText());
+
+
+
   }
 }

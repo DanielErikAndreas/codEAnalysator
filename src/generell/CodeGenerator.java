@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Allon on 11.12.2017.
@@ -12,6 +13,17 @@ public class CodeGenerator {
   private String muster;
   private int seqStart, seqEnd;
   private File outFile;
+  private ArrayList<Integer> musterIndexList = new ArrayList<Integer>();
+  private ArrayList<Integer> einBitFehlerIndexList = new ArrayList<Integer>();
+  private ArrayList<Integer> zweiBitFehlerIndexList = new ArrayList<Integer>();
+  private ArrayList<Integer> dreiBitFehlerIndexList = new ArrayList<Integer>();
+  private boolean fehlerInSequenz = false;
+  private int fehlerBitFehlt;
+  private int fehlerBitGewechselt;
+  private int fehlerBitZuviel;
+  private int einBitFehler;
+  private int zweiBitFehler;
+  private int dreiBitFehler;
 
   public static final int RECHTSBÜNDIG = 1;
   public static final int LINKSBÜNDIG = 2;
@@ -123,5 +135,16 @@ public class CodeGenerator {
     sb.append("m(").append(muster);
     sb.append("), s(").append(seqStart).append("-").append(seqEnd).append(")");
     return sb.toString();
+  }
+
+  public static String großbuchstaben(String _s) {
+    char[] großbuchstaben = new char[_s.length()];
+    for (int i = 0; i < großbuchstaben.length; i++) {
+      großbuchstaben[i] = _s.charAt(i);
+      if (_s.charAt(i) >= 'a' && _s.charAt(i) <= 'z') {
+        großbuchstaben[i] -= 32;
+      }
+    }
+    return new String(großbuchstaben, 0, großbuchstaben.length);
   }
 }

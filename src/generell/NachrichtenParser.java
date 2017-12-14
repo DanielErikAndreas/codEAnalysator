@@ -297,7 +297,7 @@ public class NachrichtenParser {
   public static int parsSequenz(String _wert) {
     int retVal = 0;
 
-    if (isAkzeptSymbol(_wert)) {
+    if (_wert.matches("[0-9abcdefx]*")) {
       int länge = _wert.length();
 
       // ist es eine Hex, oder Binär- Darstellung
