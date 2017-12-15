@@ -69,6 +69,12 @@ public class SetUp {
                   "20001", "0", "0b10000100001000010-0b10101011001100010",
                   true, false, false, false, true,
                   "10101010101010101111111101000XXXXXXXXXXXXXXXXX11111111000000001111111111111111000000001100110011100001"
+          ),
+          new SetUpElement(  // (7) 1.000 Nachrichten
+                  "/home/studi/BIT-Fehler_Statistik_Rohdaten/nebenbei/USRP_RTL-SDR_ASK_F433920K_SR1M_BL20_P20ms.txt",
+                  "1000", "0", "0",
+                  true, true, false, false, true,
+                  "101010101010101011111111001100110000111100001111011001100010100001111000000001111111110101111111111111111"
           )
   };
 

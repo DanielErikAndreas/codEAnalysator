@@ -57,7 +57,8 @@ public class MainFX extends Application {
     // (4) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_1000000_Nachrichten_S1M_F433920KH_B50_P20ms.txt
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
     // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
-    int setUpNummer = 1;
+    // (7) /home/studi/BIT-Fehler_Statistik_Rohdaten/nebenbei/USRP_RTL-SDR_ASK_F433920K_SR1M_BL20_P20ms.txt
+    int setUpNummer = 7;
 
     //System.out.println(CodeGenerator.großbuchstaben("asdER123sd()"));
 
@@ -232,7 +233,7 @@ public class MainFX extends Application {
     }
   }
 
-  private void warnung(String _s) {
+  public static void warnung(String _s) {
     Alert alert = new Alert(Alert.AlertType.WARNING);
     alert.setTitle("Warnung");
     alert.setHeaderText(_s);

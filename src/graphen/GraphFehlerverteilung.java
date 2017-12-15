@@ -105,7 +105,8 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        if (!fehlerInMasage) {
+        fehler = massages.get(i).countFehler(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG);
+        if (!fehlerInMasage && fehler == 0) {
           sektoren[i][5] = KEINFEHLER;
         } else {
           sektoren[i][5] = WEIß;

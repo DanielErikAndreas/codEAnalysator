@@ -19,9 +19,7 @@ import java.io.File;
 public class CodeGeneratorUI {
   public static boolean isAtiv = false;
   public static String currentPath = System.getProperty("user.home");
-  private int fehlerBitFehlt;
-  private int fehlerBitGewechselt;
-  private int fehlerBitZuviel;
+
   private TextField textFieldBitFehlt;
   private TextField textFieldBitGewechselt;
   private TextField textFieldBitZuViel;
@@ -58,13 +56,13 @@ public class CodeGeneratorUI {
 
       Label labelMaske = new Label("Maske");
       labelMaske.getStyleClass().add("labels");
-      TextField textFieldMaske = new TextField();
+      TextField textFieldMaske = new MaskeTextFeld();
       textFieldMaske.setText("101010101010101011111111XXXXXXXX111100001010111101101100111100000101");
       textFieldMaske.getStyleClass().add("textFeldlang");
 
       Label labelSequenzraum = new Label("Sequenzraum");
       labelSequenzraum.getStyleClass().add("labels");
-      TextField textFieldSequenzraum = new TextField();
+      TextField textFieldSequenzraum = new SequenzTextFeld();
       textFieldSequenzraum.setText("1000000");
       textFieldSequenzraum.getStyleClass().add("textFeldlang");
 
@@ -75,19 +73,19 @@ public class CodeGeneratorUI {
 
       Label labelEinBitFehler = new Label("Ein Bit Fehler");
       labelEinBitFehler.getStyleClass().add("labels");
-      TextField textFieldEinBitFehler = new TextField();
+      TextField textFieldEinBitFehler = new NummerTextFeld();
       textFieldEinBitFehler.setText("0");
       textFieldEinBitFehler.getStyleClass().add("textFeld");
 
       Label labelZweiBitFehler = new Label("Zwei Bit Fehler");
       labelZweiBitFehler.getStyleClass().add("labels");
-      TextField textFieldZweiBitFehler = new TextField();
+      TextField textFieldZweiBitFehler = new NummerTextFeld();
       textFieldZweiBitFehler.setText("0");
       textFieldZweiBitFehler.getStyleClass().add("textFeld");
 
       Label labelDreiBitFehler = new Label("Zwei Bit Fehler");
       labelDreiBitFehler.getStyleClass().add("labels");
-      TextField textFieldDreiBitFehler = new TextField();
+      TextField textFieldDreiBitFehler = new NummerTextFeld();
       textFieldDreiBitFehler.setText("0");
       textFieldDreiBitFehler.getStyleClass().add("textFeld");
 
@@ -103,12 +101,6 @@ public class CodeGeneratorUI {
       textFieldBitFehlt = new NummerTextFeld();
       textFieldBitFehlt.setText("50");
       textFieldBitFehlt.getStyleClass().add("textFeld");
-      textFieldBitFehlt.setOnAction(e -> {
-        System.out.println("enter");
-      });
-      textFieldBitFehlt.setOnMouseClicked(e -> {
-        System.out.println("click");
-      });
 
       Label labelZweiBitGewechselt = new Label("Bit gekippt");
       labelZweiBitGewechselt.getStyleClass().add("labels");
@@ -127,9 +119,12 @@ public class CodeGeneratorUI {
       buttonGenerieren.setText("generieren");
       buttonGenerieren.setOnAction(e -> {
         CodeGenerator codeGenerator = new CodeGenerator(new File(textFieldZiel.getText()));
-        codeGenerator.setMuster(textFieldMaske.getText());
-        codeGenerator.setSequenz(textFieldSequenzraum.getText());
-        codeGenerator.generate();
+        if(codeGenerator.setSequenz(textFieldSequenzraum.getText())){
+          codeGenerator.setMuster(textFieldMaske.getText());
+          codeGenerator.generate();
+        } else {
+          MainFX.warnung("Sequenz: kein akzeptiertes Format!");
+        }
       });
       HBox.setHgrow(buttonGenerieren, Priority.ALWAYS);
       buttonGenerieren.setMaxWidth(Double.MAX_VALUE);
@@ -175,24 +170,10 @@ public class CodeGeneratorUI {
 
   public static String returnTextFileString(File _file) {
     String fileNameKomplett = _file.getAbsolutePath();
-    String name = _file.getName();
-    int index = name.lastIndexOf('.');
-    if (index == -1) {
+    if(!fileNameKomplett.matches(".*.txt")) {
       fileNameKomplett += ".txt";
-    } else {
-      if (!name.substring(name.lastIndexOf('.')).equals(".txt")) {
-        fileNameKomplett += ".txt";
-      }
     }
     return fileNameKomplett;
   }
 
-  private void berechneWerte() {
-    fehlerBitFehlt = Integer.parseInt(textFieldBitFehlt.getText());
-    fehlerBitGewechselt = Integer.parseInt(textFieldBitGewechselt.getText());
-    fehlerBitZuviel = Integer.parseInt(textFieldBitZuViel.getText());
-
-
-
-  }
 }

@@ -147,4 +147,13 @@ public class CodeGenerator {
     }
     return new String(großbuchstaben, 0, großbuchstaben.length);
   }
+
+  public void setWerte(int _einBitFehler, int _zweiBitFehler, int _dreiBitFehler, int _fehlerBitFehlt, int _fehlerBitGewechselt, int _fehlerBitZuviel) {
+    fehlerBitFehlt = _fehlerBitFehlt;
+    fehlerBitGewechselt = _fehlerBitGewechselt;
+    fehlerBitZuviel = _fehlerBitZuviel;
+    einBitFehler = _einBitFehler;
+    zweiBitFehler = _zweiBitFehler;
+    dreiBitFehler = _dreiBitFehler;
+  }
 }
