@@ -74,19 +74,19 @@ public class CodeGeneratorUI {
       Label labelEinBitFehler = new Label("Ein Bit Fehler");
       labelEinBitFehler.getStyleClass().add("labels");
       TextField textFieldEinBitFehler = new NummerTextFeld();
-      textFieldEinBitFehler.setText("0");
+      textFieldEinBitFehler.setText("30");
       textFieldEinBitFehler.getStyleClass().add("textFeld");
 
       Label labelZweiBitFehler = new Label("Zwei Bit Fehler");
       labelZweiBitFehler.getStyleClass().add("labels");
       TextField textFieldZweiBitFehler = new NummerTextFeld();
-      textFieldZweiBitFehler.setText("0");
+      textFieldZweiBitFehler.setText("20");
       textFieldZweiBitFehler.getStyleClass().add("textFeld");
 
-      Label labelDreiBitFehler = new Label("Zwei Bit Fehler");
+      Label labelDreiBitFehler = new Label("Drei Bit Fehler");
       labelDreiBitFehler.getStyleClass().add("labels");
       TextField textFieldDreiBitFehler = new NummerTextFeld();
-      textFieldDreiBitFehler.setText("0");
+      textFieldDreiBitFehler.setText("10");
       textFieldDreiBitFehler.getStyleClass().add("textFeld");
 
       Label labelFrei = new Label("");
@@ -120,6 +120,13 @@ public class CodeGeneratorUI {
       buttonGenerieren.setOnAction(e -> {
         CodeGenerator codeGenerator = new CodeGenerator(new File(textFieldZiel.getText()));
         if(codeGenerator.setSequenz(textFieldSequenzraum.getText())){
+          codeGenerator.setWerte(
+                  Integer.parseInt(textFieldEinBitFehler.getText()),
+                  Integer.parseInt(textFieldZweiBitFehler.getText()),
+                  Integer.parseInt(textFieldDreiBitFehler.getText()),
+                  Integer.parseInt(textFieldBitFehlt.getText()),
+                  Integer.parseInt(textFieldBitGewechselt.getText()),
+                  Integer.parseInt(textFieldBitZuViel.getText()));
           codeGenerator.setMuster(textFieldMaske.getText());
           codeGenerator.generate();
         } else {
