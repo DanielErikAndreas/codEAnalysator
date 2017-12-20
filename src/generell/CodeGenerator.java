@@ -175,7 +175,6 @@ public class CodeGenerator {
     fehlerBitFehlt = (int) (anteilBitFehlt * fehlerSumme);
     fehlerBitGewechselt = (int) (anteilBitGewechselt * fehlerSumme);
     fehlerBitZuviel = (int) (anteilBitZuviel * fehlerSumme);
-    System.out.println("test2");
   }
 
   private void buldZufallsTabellen() {
@@ -193,7 +192,28 @@ public class CodeGenerator {
     for (int i = 0; i < distanz; i++)
       nachrichtenIndexListe.add(i);
 
+    int rand;
+    Integer tmpIndex;
+    for (int i = 0; i < dreiBitFehler; i++) {
+      rand = rand(nachrichtenIndexListe.size() - 1);
+      tmpIndex = nachrichtenIndexListe.get(rand);
+      anzahlFehlerProNachricht[tmpIndex] = 3;
+      nachrichtenIndexListe.remove(tmpIndex);
+    }
 
+    for (int i = 0; i < zweiBitFehler; i++) {
+      rand = rand(nachrichtenIndexListe.size() - 1);
+      tmpIndex = nachrichtenIndexListe.get(rand);
+      anzahlFehlerProNachricht[tmpIndex] = 2;
+      nachrichtenIndexListe.remove(tmpIndex);
+    }
+
+    for (int i = 0; i < einBitFehler; i++) {
+      rand = rand(nachrichtenIndexListe.size() - 1);
+      tmpIndex = nachrichtenIndexListe.get(rand);
+      anzahlFehlerProNachricht[tmpIndex] = 1;
+      nachrichtenIndexListe.remove(tmpIndex);
+    }
 
   }
 
