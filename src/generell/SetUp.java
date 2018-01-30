@@ -31,7 +31,7 @@ public class SetUp {
           new SetUpElement(  // (0) standard
                   "",
                   "0", "0", "0-",
-                  true, true, true, true, true,
+                  true, true, false, false, true,
                   ""
           ),
           new SetUpElement(  // (1) testSetUp 1
@@ -75,6 +75,12 @@ public class SetUp {
                   "1000", "0", "0",
                   true, true, false, false, true,
                   "101010101010101011111111001100110000111100001111011001100010100001111000000001111111110101111111111111111"
+          ),
+          new SetUpElement(  // (8) 4.096 Nachrichten
+                  "/home/studi/BIT-Fehler_Statistik_Rohdaten/nebenbei2/USRP-USRP_0N0129_0C0907_BL50_ET3_ASK_F433M92_SR0M_P10m_G30-G30.txt",
+                  "4096", "0", "0-4095",
+                  true, true, false, false, true,
+                  "101010101010101011111111XXXX1XXXX1XXXX11110000111100001010110011001100111100001111000010101010111101101001000011110101000011001100111101010101000011110011001100001111"
           )
   };
 

@@ -12,7 +12,7 @@ public class GraphMassageFehlerverteilung extends Graph {
   private int balkenbreite = 6;
   private int balkenabstand = 2;
 
-  private static final String farbBedeutung[] = {"Bit fehl", "Bit zu viel", "Bit gewechselt"};
+  private static final String farbBedeutung[] = {"Bit fehlt", "Bit zu viel", "Bit gewechselt"};
   private static final int farbArray[] = {
           0xff007f, // maganta
           0xff8000, // orange

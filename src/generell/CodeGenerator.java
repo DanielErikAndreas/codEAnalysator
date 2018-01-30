@@ -6,8 +6,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Allon on 11.12.2017.
@@ -16,21 +14,7 @@ public class CodeGenerator {
   private String muster;
   private int seqStart, seqEnd, distanz;
   private File outFile;
-  private ArrayList<Integer> nachrichtenIndexListe = new ArrayList<Integer>();
-  private int anzahlFehlerProNachricht[];
-  private ArrayList<Integer> einBitFehlerIndexList = new ArrayList<Integer>();
-  private ArrayList<Integer> zweiBitFehlerIndexList = new ArrayList<Integer>();
-  private ArrayList<Integer> dreiBitFehlerIndexList = new ArrayList<Integer>();
-  private ArrayList<Integer> fehlerBitFehltIndexList = new ArrayList<Integer>();
-  private ArrayList<Integer> fehlerBitGewechseltIndexList = new ArrayList<Integer>();
-  private ArrayList<Integer> fehlerBitZuvielIndexList = new ArrayList<Integer>();
-  private boolean fehlerInSequenz = false;
-  private int fehlerBitFehlt;
-  private int fehlerBitGewechselt;
-  private int fehlerBitZuviel;
-  private int einBitFehler;
-  private int zweiBitFehler;
-  private int dreiBitFehler;
+
 
   public static final int RECHTSBÜNDIG = 1;
   public static final int LINKSBÜNDIG = 2;
@@ -50,12 +34,6 @@ public class CodeGenerator {
     muster.getChars(0, muster.length(), musterChars, 0);
 
     distanz = Graph.distanz(seqStart, seqEnd) + 1;
-    anzahlFehlerProNachricht = new int[distanz];
-    Arrays.fill(anzahlFehlerProNachricht, 0);
-
-    if (einBitFehler != 0 || zweiBitFehler != 0 || dreiBitFehler != 0)
-      buldZufallsTabellen();
-
 
     FileWriter fileWriter = null;
     BufferedWriter bufferedWriter = null;
@@ -97,7 +75,7 @@ public class CodeGenerator {
     }
 
 
-    System.out.println("test");
+    //System.out.println("test");
   }
 
 
@@ -163,61 +141,4 @@ public class CodeGenerator {
     return new String(großbuchstaben, 0, großbuchstaben.length);
   }
 
-  public void setWerte(int _einBitFehler, int _zweiBitFehler, int _dreiBitFehler, int _fehlerBitFehlt, int _fehlerBitGewechselt, int _fehlerBitZuviel) {
-    einBitFehler = _einBitFehler;
-    zweiBitFehler = _zweiBitFehler;
-    dreiBitFehler = _dreiBitFehler;
-    int fehlerAnteilSumme = _fehlerBitFehlt + _fehlerBitGewechselt + _fehlerBitZuviel;
-    float anteilBitFehlt = (float) _fehlerBitFehlt / fehlerAnteilSumme;
-    float anteilBitGewechselt = (float) _fehlerBitGewechselt / fehlerAnteilSumme;
-    float anteilBitZuviel = (float) _fehlerBitZuviel / fehlerAnteilSumme;
-    int fehlerSumme = einBitFehler + 2 * zweiBitFehler + 3 * dreiBitFehler;
-    fehlerBitFehlt = (int) (anteilBitFehlt * fehlerSumme);
-    fehlerBitGewechselt = (int) (anteilBitGewechselt * fehlerSumme);
-    fehlerBitZuviel = (int) (anteilBitZuviel * fehlerSumme);
-  }
-
-  private void buldZufallsTabellen() {
-    int musterLänge = muster.length();
-
-    for (int i = 0; i < fehlerBitFehlt; i++)
-      fehlerBitFehltIndexList.add(rand(musterLänge));
-
-    for (int i = 0; i < fehlerBitGewechselt; i++)
-      fehlerBitGewechseltIndexList.add(rand(musterLänge));
-
-    for (int i = 0; i < fehlerBitZuviel; i++)
-      fehlerBitZuvielIndexList.add(rand(musterLänge));
-
-    for (int i = 0; i < distanz; i++)
-      nachrichtenIndexListe.add(i);
-
-    int rand;
-    Integer tmpIndex;
-    for (int i = 0; i < dreiBitFehler; i++) {
-      rand = rand(nachrichtenIndexListe.size() - 1);
-      tmpIndex = nachrichtenIndexListe.get(rand);
-      anzahlFehlerProNachricht[tmpIndex] = 3;
-      nachrichtenIndexListe.remove(tmpIndex);
-    }
-
-    for (int i = 0; i < zweiBitFehler; i++) {
-      rand = rand(nachrichtenIndexListe.size() - 1);
-      tmpIndex = nachrichtenIndexListe.get(rand);
-      anzahlFehlerProNachricht[tmpIndex] = 2;
-      nachrichtenIndexListe.remove(tmpIndex);
-    }
-
-    for (int i = 0; i < einBitFehler; i++) {
-      rand = rand(nachrichtenIndexListe.size() - 1);
-      tmpIndex = nachrichtenIndexListe.get(rand);
-      anzahlFehlerProNachricht[tmpIndex] = 1;
-      nachrichtenIndexListe.remove(tmpIndex);
-    }
-
-  }
-
-  public static int rand(int _wert) {
-    return (int) (Math.random() * _wert + 1);
-  }
 }
