@@ -28,7 +28,6 @@ public class Graph {
   protected static final int MITTIG = 0;
   protected static final int RECHTSBÜNDIG = 1;
   protected static final int LINKSBÜNDIG = 2;
-
   protected static final int X = 0;
   protected static final int Y = 1;
 

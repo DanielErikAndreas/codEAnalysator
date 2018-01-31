@@ -1,10 +1,7 @@
 package ui;
 
 import generell.*;
-import graphen.GraphFehlerverteilung;
-import graphen.GraphMassageFehlerverteilung;
-import graphen.GraphPausenlänge;
-import graphen.GraphPausenverteilung;
+import graphen.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -37,6 +34,7 @@ public class MainFX extends Application {
   private static CheckBox checkBoxPausenlänge;
   private static CheckBox checkBoxPausenverteilung;
   private static CheckBox checkBoxCSVDatei;
+  private static CheckBox checkBoxSequenzen;
 
   private static TextArea textArea;
 
@@ -132,12 +130,15 @@ public class MainFX extends Application {
     checkBoxPausenverteilung = new CheckBox("Pausenverteilung");
     checkBoxPausenverteilung.setSelected(setUp.isPausenVerteilung(setUpNummer));
     checkBoxCSVDatei = new CheckBox("CSV anlegen");
+    checkBoxSequenzen = new CheckBox("Sequenzen");
+    checkBoxSequenzen.setSelected(setUp.isSequenzen(setUpNummer));
     checkGridpane.add(checkBoxStatistik, 0, 0);
     checkGridpane.add(checkBoxBitfehlerverteilung, 1, 0);
     checkGridpane.add(checkBoxFehlerverteilung, 2, 0);
     checkGridpane.add(checkBoxPausenlänge, 0, 1);
     checkGridpane.add(checkBoxPausenverteilung, 1, 1);
     checkGridpane.add(checkBoxCSVDatei, 3, 0);
+    checkGridpane.add(checkBoxSequenzen, 4, 0);
 
     Label labelMaske = new Label("Maske");
     labelMaske.getStyleClass().add("labels");
@@ -212,6 +213,9 @@ public class MainFX extends Application {
           }
           if (checkBoxFehlerverteilung.isSelected()) {
             grafikBuilder.addGraph(new GraphFehlerverteilung(nachrichtenManager));
+          }
+          if (checkBoxSequenzen.isSelected()) {
+            grafikBuilder.addGraph(new GraphSequenzen(nachrichtenManager));
           }
           if (checkBoxPausenlänge.isSelected()) {
             grafikBuilder.addGraph(new GraphPausenlänge(nachrichtenManager));
