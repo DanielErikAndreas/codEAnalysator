@@ -1,7 +1,7 @@
 package graphen;
 
 import fehler.Fehler;
-import generell.Massage;
+import generell.Message;
 import generell.NachrichtenManager;
 
 import java.awt.*;
@@ -24,15 +24,15 @@ public class GraphSequenzen extends Graph {
 
   public GraphSequenzen(NachrichtenManager _nachrichtenManager) {
     super(_nachrichtenManager);
-    ArrayList<Massage> massages = nachrichtenManager.getNachrichtenParser().getMassages();
-    amplitude = new int[massages.size()];
-    amplitudenFarben  = new int[massages.size()];
-    ausdehnungX = massages.size();
+    ArrayList<Message> messages = nachrichtenManager.getNachrichtenParser().getMessages();
+    amplitude = new int[messages.size()];
+    amplitudenFarben  = new int[messages.size()];
+    ausdehnungX = messages.size();
 
     maxYwert = 0;
     for (int i = 0; i < amplitude.length; i++) {
-      if (massages.get(i).countFehler(Fehler.Typ.NICHT_EXISTENT, Fehler.Typ.KEINE_ÜBEREINSTIMMUNG) == 0) {
-        amplitude[i] = massages.get(i).getSequenzNummer() + 1;
+      if (messages.get(i).countFehler(Fehler.Typ.NICHT_EXISTENT, Fehler.Typ.KEINE_ÜBEREINSTIMMUNG) == 0) {
+        amplitude[i] = messages.get(i).getSequenzNummer() + 1;
         if (amplitude[i] > maxYwert) {
           maxYwert = amplitude[i];
         }
@@ -65,7 +65,7 @@ public class GraphSequenzen extends Graph {
     breite = paddingLeft + ausdehnungX + paddingRight;
     höhe = paddingTop + ausdehnungY + paddingButom;
 
-    //System.out.println(massages.get(2).countFehler(Fehler.Typ.NICHT_EXISTENT));
+    //System.out.println(messages.get(2).countFehler(Fehler.Typ.NICHT_EXISTENT));
   }
 
   @Override

@@ -83,6 +83,12 @@ public class SetUp {
                   "4096", "0", "0-4095",
                   true, true, false, false, true, true,
                   "101010101010101011111111XXXX1XXXX1XXXX11110000111100001010110011001100111100001111000010101010111101101001000011110101000011001100111101010101000011110011001100001111"
+          ),
+          new SetUpElement(  // (9) 20.000 Nachrichten
+                  "/home/studi/Test_Aufnahmen_RTL_SDR/Nachrichten20K_433,92M_BIT100_Pause100ms_Sps1M_ASK_RTL-SDR.txt",
+                  "20001", "0", "0-20000",
+                  true, true, false, false, true, false,
+                  "101010101010101011111111XXXX1XXXX1XXXX1XXXX11111111010100001111001100110101010101010101001101101111"
           )
   };
 

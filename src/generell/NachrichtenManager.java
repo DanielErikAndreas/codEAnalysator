@@ -40,10 +40,10 @@ public class NachrichtenManager {
     Pause tmpPausePause;
 
     if (sollPause > 0)
-      for (Massage massage : nachrichtenParser.getMassages()) {
+      for (Message message : nachrichtenParser.getMessages()) {
 
         // Paket der Pausen hinzufügen
-        tmpIntPause = Integer.parseInt(massage.getPause());
+        tmpIntPause = Integer.parseInt(message.getPause());
         tmpPausePause = inPause(tmpIntPause);
         if (tmpPausePause != null)
           tmpPausePause.addAnzahl();
@@ -95,12 +95,12 @@ public class NachrichtenManager {
       bufferedWriter = new BufferedWriter(fileWriter);
       bufferedWriter.write(sb.toString());
 
-      nummerStringLänge = (nachrichtenParser.getMassages().size() + "").length();
-      for (int i = 0; i < nachrichtenParser.getMassages().size(); i++) {
+      nummerStringLänge = (nachrichtenParser.getMessages().size() + "").length();
+      for (int i = 0; i < nachrichtenParser.getMessages().size(); i++) {
         sb = new StringBuilder();
         sb.append(passString(RECHTSBÜNDIG, i + "", nummerStringLänge));
         sb.append(": ");
-        sb.append(nachrichtenParser.getMassages().get(i).toString()).append(System.lineSeparator());
+        sb.append(nachrichtenParser.getMessages().get(i).toString()).append(System.lineSeparator());
         bufferedWriter.write(sb.toString());
       }
 
@@ -212,37 +212,42 @@ public class NachrichtenManager {
             bezeichnung(".. Ø:") + durchschnitt(nachrichtenParser.getPausenSumme(), nachrichtenParser.getEmpfangeneNachrichten()),
             bezeichnung(".. Spanne:") + printWert(nachrichtenParser.getMaxPause() - nachrichtenParser.getMinPause()),
             "",
-            bezeichnung("Übereinstimmungen:") + printWert(fs.get(Fehler.Typ.KEIN_FEHLER, Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)) + anteil(fs.get(Fehler.Typ.KEIN_FEHLER, Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)),
-            bezeichnung("kein Fehler:") + printWert(fs.get(Fehler.Typ.KEIN_FEHLER)) + anteil(fs.get(Fehler.Typ.KEIN_FEHLER)),
-            bezeichnung("enthält komb. Nachricht: ") + printWert(fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)) + anteil(fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)),
-            bezeichnung("keine Übereinstimmung: ") + printWert(fs.get(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG)),
+            bezeichnung("Übereinstimmungen:") + printWertPlusAnteil(fs.get(Fehler.Typ.KEIN_FEHLER, Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)),
+            bezeichnung("kein Fehler:") + printWertPlusAnteil(fs.get(Fehler.Typ.KEIN_FEHLER)),
+            bezeichnung("enthält Nachricht: ") + printWertPlusAnteil(fs.get(Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT)),
+            bezeichnung("keine Übereinstimmung: ") + printWertPlusAnteil(fs.get(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG)),
+            bezeichnung("Fehler in der Nachricht: ") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BITFEHLER)),
             "",
             "Fehler:",
-            bezeichnung("Bit fehlt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)),
-            bezeichnung("Bit zu viel:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)),
-            bezeichnung("Bit gekipt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)),
+            bezeichnung("Bit fehlt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_FEHLT)),
+            bezeichnung("Bit zu viel:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL)),
+            bezeichnung("Bit gekipt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL)),
             "",
-            bezeichnung("EinBitFehler:") + printWert(fs.get(Fehler.Typ.EINBIT_FEHLER)) + anteil(fs.get(Fehler.Typ.EINBIT_FEHLER)),
-            bezeichnung("ZweiBitFehler:") + printWert(fs.get(Fehler.Typ.ZWEIBIT_FEHLER)) + anteil(fs.get(Fehler.Typ.ZWEIBIT_FEHLER)),
-            bezeichnung("DreiBitFehler:") + printWert(fs.get(Fehler.Typ.DREIBIT_FEHLER)) + anteil(fs.get(Fehler.Typ.DREIBIT_FEHLER)),
+            bezeichnung("EinBitFehler:") + printWertPlusAnteil(fs.get(Fehler.Typ.EINBIT_FEHLER)),
+            bezeichnung("ZweiBitFehler:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWEIBIT_FEHLER)),
+            bezeichnung("DreiBitFehler:") + printWertPlusAnteil(fs.get(Fehler.Typ.DREIBIT_FEHLER)),
             "",
-            bezeichnung("Bit 1 fehlt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT)),
-            bezeichnung("Bit 1 gekipt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1)),
-            bezeichnung("Bit 1 zu viel:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL)),
+            bezeichnung("Bit 1 fehlt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_FEHLT)),
+            bezeichnung("Bit 1 gekipt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1)),
+            bezeichnung("Bit 1 zu viel:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL)),
             "",
-            bezeichnung("Bit 0 fehlt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT)),
-            bezeichnung("Bit 0 gekipt:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)),
-            bezeichnung("Bit 0 zu viel:") + printWert(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)) + anteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)),
+            bezeichnung("Bit 0 fehlt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT)),
+            bezeichnung("Bit 0 gekipt:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)),
+            bezeichnung("Bit 0 zu viel:") + printWertPlusAnteil(fs.get(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL)),
             "",
-            bezeichnung("shift:") + printWert(fs.get(Fehler.Typ.SHIFT)) + anteil(fs.get(Fehler.Typ.SHIFT)),
+            bezeichnung("shift:") + printWertPlusAnteil(fs.get(Fehler.Typ.SHIFT)),
             bezeichnung(".. max:") + printWert(nachrichtenParser.getMaxShift()),
             bezeichnung(".. Ø:") + durchschnitt(nachrichtenParser.getShiftSumme(), fs.get(Fehler.Typ.SHIFT)),
             "",
-            bezeichnung("Nachbits:") + printWert(fs.get(Fehler.Typ.NACHBITS)) + anteil(fs.get(Fehler.Typ.NACHBITS)),
+            bezeichnung("Nachbits:") + printWertPlusAnteil(fs.get(Fehler.Typ.NACHBITS)),
             bezeichnung(".. max:") + printWert(nachrichtenParser.getMaxNachbit()),
             bezeichnung(".. Ø:") + durchschnitt(nachrichtenParser.getNachbitsSumme(), fs.get(Fehler.Typ.NACHBITS))
     };
     return retVal;
+  }
+
+  private String printWertPlusAnteil(int _wert) {
+    return printWert(_wert) + anteil(_wert);
   }
 
   private String anteil(int _wert) {

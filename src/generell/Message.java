@@ -5,7 +5,7 @@ import fehler.FehlerListe;
 
 import java.util.ArrayList;
 
-public class Massage {
+public class Message {
   private String bits;
   private String decoding_index;
   private String message_type_id;
@@ -29,13 +29,13 @@ public class Massage {
   private static final boolean checkKomments = true;
 
 
-  public Massage(String _bits) {
-    setMassage(_bits);
+  public Message(String _bits) {
+    setMessage(_bits);
     pause = "0";
   }
 
-  public Massage(String _bits, String _decoding_index, String _message_type_id, String _modulator_index, String _pause) {
-    setMassage(_bits);
+  public Message(String _bits, String _decoding_index, String _message_type_id, String _modulator_index, String _pause) {
+    setMessage(_bits);
     //bits = _bits;
     decoding_index = _decoding_index;
     message_type_id = _message_type_id;
@@ -48,7 +48,7 @@ public class Massage {
    * >>>>>>>>>>>>>>>>>>>>>>>
    * untersucht den Code und detektiert FehlerTyp
    */
-  public Massage checkCode() {
+  public Message checkCode() {
     tmpBits = bits;
     int fehler = bitFehler(tmpBits);
 
@@ -310,7 +310,7 @@ public class Massage {
   }
 
   /**
-   * gibt den Index zurück, an der Stelle wo die Sollnachricht am besten in die Massage passt
+   * gibt den Index zurück, an der Stelle wo die Sollnachricht am besten in die Message passt
    *
    * @param _massage
    * @return
@@ -377,22 +377,22 @@ public class Massage {
     return fehlerList;
   }
 
-  public void setMassage(String _massage) {
+  public void setMessage(String _message) {
     if (checkKomments) {
       int bitsEnd = 0;
-      for (int i = 0; i < _massage.length(); i++) {
-        if (_massage.charAt(i) == '#') {
+      for (int i = 0; i < _message.length(); i++) {
+        if (_message.charAt(i) == '#') {
           bitsEnd = i;
           break;
         }
       }
       if (bitsEnd > 0) {
-        bits = _massage.substring(0, bitsEnd).trim();
+        bits = _message.substring(0, bitsEnd).trim();
       } else {
-        bits = _massage;
+        bits = _message;
       }
     } else {
-      bits = _massage;
+      bits = _message;
     }
   }
 

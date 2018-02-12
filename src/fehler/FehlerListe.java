@@ -137,6 +137,15 @@ public class FehlerListe {
           }
         }
 
+        // wenn ein Fehler in der Nachricht auftritt
+      } else if (_typ[i] == Fehler.Typ.ZWISCHEN_BITFEHLER) {
+        for (Fehler fehler : fehlerList) {
+          if (isZwischenFehler(fehler.getTyp())) {
+            tmpFehlerCount++;
+            break;
+          }
+        }
+
         // wenn der eigentlich gesuchte Fehler auftritt
       } else {
 

@@ -1,6 +1,6 @@
 package graphen;
 
-import generell.Massage;
+import generell.Message;
 import generell.NachrichtenManager;
 
 import java.awt.*;
@@ -12,13 +12,13 @@ public class GraphPausenlänge extends Graph {
 
   public GraphPausenlänge(NachrichtenManager _nachrichtenManager) {
     super(_nachrichtenManager);
-    ArrayList<Massage> massages = nachrichtenManager.getNachrichtenParser().getMassages();
+    ArrayList<Message> messages = nachrichtenManager.getNachrichtenParser().getMessages();
     maxYwert = nachrichtenManager.getNachrichtenParser().getMaxPause();
 
-    ausdehnungX = massages.size();
+    ausdehnungX = messages.size();
     amplitude = new int[ausdehnungX];
     for (int i = 0; i < amplitude.length; i++) {
-      amplitude[i] = yAnpassung(ausdehnungY, maxYwert, Integer.parseInt(massages.get(i).getPause()));
+      amplitude[i] = yAnpassung(ausdehnungY, maxYwert, Integer.parseInt(messages.get(i).getPause()));
     }
 
     werteNameX = "Pakete";

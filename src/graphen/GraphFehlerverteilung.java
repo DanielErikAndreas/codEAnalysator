@@ -1,6 +1,6 @@
 package graphen;
 
-import generell.Massage;
+import generell.Message;
 import generell.NachrichtenManager;
 import fehler.Fehler;
 
@@ -25,9 +25,9 @@ public class GraphFehlerverteilung extends Graph {
 
   public GraphFehlerverteilung(NachrichtenManager _nachrichtenManager) {
     super(_nachrichtenManager);
-    ArrayList<Massage> massages = nachrichtenManager.getNachrichtenParser().getMassages();
+    ArrayList<Message> messages = nachrichtenManager.getNachrichtenParser().getMessages();
 
-    sektoren = new int[massages.size()][sektorenBezeichnung.length];
+    sektoren = new int[messages.size()][sektorenBezeichnung.length];
     ausdehnungX = sektoren.length;
 
     boolean fehlerInMasage;
@@ -35,9 +35,9 @@ public class GraphFehlerverteilung extends Graph {
     int fehler;
     for (int i = 0; i < sektoren.length; i++) {
       fehlerInMasage = false;
-      fehler = massages.get(i).countFehler(Fehler.Typ.NICHT_EXISTENT);
+      fehler = messages.get(i).countFehler(Fehler.Typ.NICHT_EXISTENT);
       if (fehler == 0) {
-        fehler = massages.get(i).countFehler(Fehler.Typ.VOR_BIT_0_ZU_VIEL, Fehler.Typ.VOR_BIT_1_ZU_VIEL);
+        fehler = messages.get(i).countFehler(Fehler.Typ.VOR_BIT_0_ZU_VIEL, Fehler.Typ.VOR_BIT_1_ZU_VIEL);
         if (fehler == 0) {
           sektoren[i][0] = WEIß;
         } else {
@@ -50,7 +50,7 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        fehler = massages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT, Fehler.Typ.ZWISCHEN_BIT_1_FEHLT);
+        fehler = messages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_0_FEHLT, Fehler.Typ.ZWISCHEN_BIT_1_FEHLT);
         if (fehler == 0) {
           sektoren[i][1] = WEIß;
         } else {
@@ -64,7 +64,7 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        fehler = massages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0, Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1);
+        fehler = messages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_0, Fehler.Typ.ZWISCHEN_BIT_WECHSEL_ZU_1);
         if (fehler == 0) {
           sektoren[i][2] = WEIß;
         } else {
@@ -78,7 +78,7 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        fehler = massages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL, Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL);
+        fehler = messages.get(i).countFehler(Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL, Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL);
         if (fehler == 0) {
           sektoren[i][3] = WEIß;
         } else {
@@ -92,7 +92,7 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        fehler = massages.get(i).countFehler(Fehler.Typ.NACH_BIT_0_ZU_VIEL, Fehler.Typ.NACH_BIT_1_ZU_VIEL);
+        fehler = messages.get(i).countFehler(Fehler.Typ.NACH_BIT_0_ZU_VIEL, Fehler.Typ.NACH_BIT_1_ZU_VIEL);
         if (fehler == 0) {
           sektoren[i][4] = WEIß;
         } else {
@@ -105,7 +105,7 @@ public class GraphFehlerverteilung extends Graph {
           }
         }
 
-        fehler = massages.get(i).countFehler(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG);
+        fehler = messages.get(i).countFehler(Fehler.Typ.KEINE_ÜBEREINSTIMMUNG);
         if (!fehlerInMasage && fehler == 0) {
           sektoren[i][5] = KEINFEHLER;
         } else {

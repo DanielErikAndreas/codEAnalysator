@@ -1,13 +1,13 @@
 package graphen;
 
-import generell.Massage;
+import generell.Message;
 import generell.NachrichtenManager;
 import fehler.Fehler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GraphMassageFehlerverteilung extends Graph {
+public class GraphMessageFehlerverteilung extends Graph {
   private int amplitude[][];
   private int balkenbreite = 6;
   private int balkenabstand = 2;
@@ -19,14 +19,14 @@ public class GraphMassageFehlerverteilung extends Graph {
           0x00994c// dunkel grün
   };
 
-  public GraphMassageFehlerverteilung(NachrichtenManager _nachrichtenManager) {
+  public GraphMessageFehlerverteilung(NachrichtenManager _nachrichtenManager) {
     super(_nachrichtenManager);
     amplitude = new int[nachrichtenManager.getSollNachricht().length()][3];
 
     // Array mit der Anzahl der Fehler auffüllen
     ausdehnungX = amplitude.length * (balkenbreite * 2 + balkenabstand * 2);
-    for (Massage massage : nachrichtenManager.getNachrichtenParser().getMassages()) {
-      for (Fehler fehler : massage.getFehlerList().getFehlerList()) {
+    for (Message message : nachrichtenManager.getNachrichtenParser().getMessages()) {
+      for (Fehler fehler : message.getFehlerList().getFehlerList()) {
         if (fehler.getTyp() == Fehler.Typ.ZWISCHEN_BIT_0_FEHLT || fehler.getTyp() == Fehler.Typ.ZWISCHEN_BIT_1_FEHLT) {
           amplitude[fehler.getIndex()][0]++;
         } else if (fehler.getTyp() == Fehler.Typ.ZWISCHEN_BIT_0_ZU_VIEL || fehler.getTyp() == Fehler.Typ.ZWISCHEN_BIT_1_ZU_VIEL) {

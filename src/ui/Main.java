@@ -2,7 +2,7 @@ package ui;
 
 import generell.*;
 import graphen.GraphFehlerverteilung;
-import graphen.GraphMassageFehlerverteilung;
+import graphen.GraphMessageFehlerverteilung;
 import graphen.GraphPausenlänge;
 import graphen.GraphPausenverteilung;
 
@@ -194,7 +194,7 @@ public class Main {
               grafikBuilder.setStatistik(checkBoxStatistik.isSelected());
 
               if (checkBoxBitfehlerverteilung.isSelected()) {
-                grafikBuilder.addGraph(new GraphMassageFehlerverteilung(nachrichtenManager));
+                grafikBuilder.addGraph(new GraphMessageFehlerverteilung(nachrichtenManager));
               }
               if (checkBoxFehlerverteilung.isSelected()) {
                 grafikBuilder.addGraph(new GraphFehlerverteilung(nachrichtenManager));

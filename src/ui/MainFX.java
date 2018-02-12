@@ -4,14 +4,12 @@ import generell.*;
 import graphen.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.File;
 
 public class MainFX extends Application {
@@ -56,7 +54,7 @@ public class MainFX extends Application {
     // (5) /home/studi/BIT-Fehler_Statistik_Rohdaten/2017-11-30_80000_Narichten_S1M_F433920KH_B100_P100ms.txt
     // (6) /home/studi/BIT-Fehler_Statistik_Rohdaten/RTL-SDR/2017-12-04_20000_Narichten_RTL_S1M_F433920KH_B100_P100ms_001.txt
     // (7) /home/studi/BIT-Fehler_Statistik_Rohdaten/nebenbei/USRP_RTL-SDR_ASK_F433920K_SR1M_BL20_P20ms.txt
-    int setUpNummer = 8;
+    int setUpNummer = 9;
 
     //System.out.println(20000 - (Integer.parseInt("100010101010011101100", 2 ) - Integer.parseInt("100010000100100010011", 2 )));
 // -11314  100010000100100010011
@@ -209,7 +207,7 @@ public class MainFX extends Application {
           grafikBuilder.setStatistik(checkBoxStatistik.isSelected());
 
           if (checkBoxBitfehlerverteilung.isSelected()) {
-            grafikBuilder.addGraph(new GraphMassageFehlerverteilung(nachrichtenManager));
+            grafikBuilder.addGraph(new GraphMessageFehlerverteilung(nachrichtenManager));
           }
           if (checkBoxFehlerverteilung.isSelected()) {
             grafikBuilder.addGraph(new GraphFehlerverteilung(nachrichtenManager));

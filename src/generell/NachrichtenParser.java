@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class NachrichtenParser {
   private File file;
-  private ArrayList<Massage> massages = new ArrayList<Massage>();
+  private ArrayList<Message> messages = new ArrayList<Message>();
   private boolean isSequenz;
   private int sequenzStart = 0;
   private int sequenzEnd = 0;
@@ -52,7 +52,7 @@ public class NachrichtenParser {
           boolean message_type = false;
           boolean ruleset = false;
 
-          Massage tmpMassage;
+          Message tmpMessage;
 
           public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equalsIgnoreCase("protocol")) protocol = true;
@@ -63,13 +63,13 @@ public class NachrichtenParser {
             if (qName.equalsIgnoreCase("messages")) messages = true;
             if (qName.equalsIgnoreCase("message")) {
               message = true;
-              tmpMassage = new Massage(
+              tmpMessage = new Message(
                       attributes.getValue("bits"),
                       attributes.getValue("decoding_index"),
                       attributes.getValue("message_type_id"),
                       attributes.getValue("modulator_index"),
                       attributes.getValue("pause"));
-              massages.add(tmpMassage);
+              NachrichtenParser.this.messages.add(tmpMessage);
             }
             if (qName.equalsIgnoreCase("message_types")) message_types = true;
             if (qName.equalsIgnoreCase("message_type")) message_type = true;
@@ -107,7 +107,7 @@ public class NachrichtenParser {
 
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-          massages.add(new Massage(line));
+          messages.add(new Message(line));
         }
       } catch (IOException e) {
         e.printStackTrace();
@@ -129,7 +129,7 @@ public class NachrichtenParser {
    * untersucht die Codes und detektiert die FehlerTyp
    */
   public void checkCode(String _sollNachricht) {
-    Massage.setSollNachricht(_sollNachricht);
+    Message.setSollNachricht(_sollNachricht);
     ArrayList<Integer> startDynFeld = new ArrayList<Integer>();
     ArrayList<Integer> endDynFeld = new ArrayList<Integer>();
     boolean inDynFeld = false;
@@ -148,49 +148,49 @@ public class NachrichtenParser {
       endDynFeld.add(_sollNachricht.length());
     }
 
-    Massage.setStartEndDynFeld(startDynFeld, endDynFeld);
+    Message.setStartEndDynFeld(startDynFeld, endDynFeld);
 
     // Fehleranalyse
-    Massage tmpMassage;
+    Message tmpMessage;
     if (isSequenz) {
       Sequenzraum sequenzraum = new Sequenzraum(sequenzStart, sequenzEnd);
-      for (Massage massage : massages) {
-        countValues(massage.checkCode());
-        int sequenzKlasse = sequenzraum.sequenzCount(massage.getSequenzNummer());
+      for (Message message : messages) {
+        countValues(message.checkCode());
+        int sequenzKlasse = sequenzraum.sequenzCount(message.getSequenzNummer());
         if (sequenzKlasse < 0) {
-          massage.addFehler(Fehler.Typ.NICHT_IM_SEQUENZRAUM, 0);
+          message.addFehler(Fehler.Typ.NICHT_IM_SEQUENZRAUM, 0);
         } else if (sequenzKlasse > 1) {
-          massage.addFehler(Fehler.Typ.SEQUENZ_DUPLIKAT, 0);
+          message.addFehler(Fehler.Typ.SEQUENZ_DUPLIKAT, 0);
         }
-        fehlerStatistik.checkMassage(massage);
+        fehlerStatistik.checkMessage(message);
       }
 
       // fehlende Sequenzen ersetzen
       int listIndex = 0;
       for (int i = sequenzStart; i < sequenzraum.get().length; i++) {
         if (sequenzraum.get()[i] == 0) {
-          tmpMassage = new Massage("0");
-          tmpMassage.setSequenzNummer(i);
-          tmpMassage.addFehler(Fehler.Typ.NICHT_EXISTENT, 0);
-          massages.add(listIndex, tmpMassage);
+          tmpMessage = new Message("0");
+          tmpMessage.setSequenzNummer(i);
+          tmpMessage.addFehler(Fehler.Typ.NICHT_EXISTENT, 0);
+          messages.add(listIndex, tmpMessage);
           fehlendeSequenzen++;
-          fehlerStatistik.checkMassage(tmpMassage);
+          fehlerStatistik.checkMessage(tmpMessage);
         }
         listIndex++;
       }
 
     } else {
-      for (Massage massage : massages) {
-        countValues(massage.checkCode());
-        fehlerStatistik.checkMassage(massage);
+      for (Message message : messages) {
+        countValues(message.checkCode());
+        fehlerStatistik.checkMessage(message);
       }
     }
   }
 
-  private void countValues(Massage _massage) {
+  private void countValues(Message _message) {
     empfangeneNachrichten++;
 
-    int pause = Integer.parseInt(_massage.getPause());
+    int pause = Integer.parseInt(_message.getPause());
     pausenSumme += pause;
     if (pause > maxPause) {
       maxPause = pause;
@@ -199,13 +199,13 @@ public class NachrichtenParser {
       minPause = pause;
     }
 
-    int shift = _massage.getShift();
+    int shift = _message.getShift();
     shiftSumme += shift;
     if (shift > maxShift) {
       maxShift = shift;
     }
 
-    int nachBits = _massage.countFehler(Fehler.Typ.NACH_BIT_0_ZU_VIEL, Fehler.Typ.NACH_BIT_1_ZU_VIEL);
+    int nachBits = _message.countFehler(Fehler.Typ.NACH_BIT_0_ZU_VIEL, Fehler.Typ.NACH_BIT_1_ZU_VIEL);
     nachbitsSumme += nachBits;
     if (nachBits > maxNachbits) {
       maxNachbits = nachBits;
@@ -229,14 +229,14 @@ public class NachrichtenParser {
     return name.substring(start, end);
   }
 
-  public ArrayList<Massage> getMassages() {
-    return massages;
+  public ArrayList<Message> getMessages() {
+    return messages;
   }
 
-  public int getAnzahlMassages(Fehler.Typ _fehlerTyp) {
+  public int getAnzahlMessages(Fehler.Typ _fehlerTyp) {
     int retVal = 0;
-    for (Massage massage : massages) {
-      if (massage.countFehler(_fehlerTyp) > 0)
+    for (Message message : messages) {
+      if (message.countFehler(_fehlerTyp) > 0)
         retVal++;
     }
     return retVal;

@@ -28,7 +28,8 @@ public class Fehler {
     SHIFT (20),
     NICHT_IM_SEQUENZRAUM (21),
     SEQUENZ_DUPLIKAT (22),
-    NACHBITS (23);
+    NACHBITS (23),
+    ZWISCHEN_BITFEHLER (24);
 
     public final int id;
     public static final int size = Typ.values().length;

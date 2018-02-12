@@ -1,6 +1,6 @@
 package fehler;
 
-import generell.Massage;
+import generell.Message;
 
 import java.util.Arrays;
 
@@ -8,6 +8,7 @@ public class FehlerStatistik {
   private int fehlerCountArray[] = new int[Fehler.Typ.size];
   private Fehler.Typ fehlerAbfrage[] = {
           Fehler.Typ.KEIN_FEHLER,
+          Fehler.Typ.KEINE_ÜBEREINSTIMMUNG,
           Fehler.Typ.ENTHÄLT_VOLLE_NACHRICHT,
           Fehler.Typ.ZWISCHEN_BIT_ZU_VIEL,
           Fehler.Typ.ZWISCHEN_BIT_FEHLT,
@@ -24,16 +25,17 @@ public class FehlerStatistik {
           Fehler.Typ.SHIFT,
           Fehler.Typ.SEQUENZ_DUPLIKAT,
           Fehler.Typ.NICHT_IM_SEQUENZRAUM,
-          Fehler.Typ.NACHBITS
+          Fehler.Typ.NACHBITS,
+          Fehler.Typ.ZWISCHEN_BITFEHLER
   };
 
   public FehlerStatistik() {
     Arrays.fill(fehlerCountArray, 0);
   }
 
-  public void checkMassage(Massage _massage) {
+  public void checkMessage(Message _message) {
     for (Fehler.Typ typ : fehlerAbfrage) {
-      if (_massage.countFehler(typ) > 0) {
+      if (_message.countFehler(typ) > 0) {
         fehlerCountArray[typ.id]++;
       }
     }
