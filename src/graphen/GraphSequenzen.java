@@ -14,7 +14,7 @@ public class GraphSequenzen extends Graph {
   private int amplitudenAnzahl[];
   private int amplitudenFarben[];
 
-  private static final String farbBedeutung[] = {"einmalig", "doppelt", "dreifach", "vierfach"};
+  private static final String farbBedeutung[] = {"einmalig", "doppelt", "dreifach", "vierfach und mehr"};
   private static final int FARBEN[] = {
           0x0080ff, // blau
           0x00994c, // dunkelgrün
@@ -26,7 +26,7 @@ public class GraphSequenzen extends Graph {
     super(_nachrichtenManager);
     ArrayList<Message> messages = nachrichtenManager.getNachrichtenParser().getMessages();
     amplitude = new int[messages.size()];
-    amplitudenFarben  = new int[messages.size()];
+    amplitudenFarben = new int[messages.size()];
     ausdehnungX = messages.size();
 
     maxYwert = 0;
@@ -49,14 +49,17 @@ public class GraphSequenzen extends Graph {
 
     for (int i = 0; i < amplitudenFarben.length; i++) {
       if (amplitudenAnzahl[amplitude[i]] > 0) {
-        amplitudenFarben[i] = FARBEN[amplitudenAnzahl[amplitude[i]] - 1];
+        if (amplitudenAnzahl[amplitude[i]] < FARBEN.length) {
+          amplitudenFarben[i] = FARBEN[amplitudenAnzahl[amplitude[i]] - 1];
+        } else {
+          amplitudenFarben[i] = FARBEN[FARBEN.length - 1];
+        }
       }
     }
 
     for (int i = 0; i < amplitude.length; i++) {
       amplitude[i] = yAnpassung(ausdehnungY, maxYwert, amplitude[i]);
     }
-
 
 
     werteNameX = "Pakete";
@@ -104,7 +107,7 @@ public class GraphSequenzen extends Graph {
     // Beschreibung
     int step;
     int posX = paddingLeft + 100;
-    for(int i = 0; i < farbBedeutung.length; i++) {
+    for (int i = 0; i < farbBedeutung.length; i++) {
       step = schreibeInGrafik(farbBedeutung[i], LINKSBÜNDIG, Font.PLAIN, 11, posX, paddingTop - 5, FARBEN[i]);
       posX += step + 20;
     }
